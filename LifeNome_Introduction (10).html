@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LifeNome — Company Introduction</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0a1628;--teal:#00b4a0;--tl2:#00d4bc;--sky:#1a9abf;
+  --slate:#6b7a8d;--line:#e2e8f0;--white:#ffffff;
+  --gold:#b8852a;--amber:#d4941e;--violet:#6d3fa0;--rose:#ffffff;--green:#1a9a6a;
+  --fd:'Cormorant Garamond',serif;--fb:'Outfit',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:#ffffff;color:var(--ink);min-height:100vh;overflow-x:hidden}
+
+/* ── NAV ── */
+#topnav{position:fixed;top:0;left:0;right:0;z-index:300;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 1px 12px rgba(10,22,40,.07)}
+.nav-inner{max-width:1300px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;height:64px;gap:1.2rem}
+.logo-wrap{display:flex;align-items:center;gap:.8rem;flex-shrink:0;cursor:pointer;padding:.3rem 0}
+.logo-img{width:48px;height:48px;border-radius:10px;object-fit:cover}
+.logo-name{font-family:var(--fd);font-size:1.55rem;font-weight:700;color:var(--ink);letter-spacing:.01em}
+.logo-name span{color:var(--teal)}
+
+/* desktop tabs — hidden on mobile */
+.nav-tabs{display:flex;gap:.05rem;overflow-x:auto;scrollbar-width:none;margin-left:auto}
+.nav-tabs::-webkit-scrollbar{display:none}
+.ntab{padding:.3rem .6rem;border-radius:6px;border:none;background:transparent;color:var(--slate);font-family:var(--fb);font-size:.67rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .18s;letter-spacing:.05em;text-transform:uppercase}
+.ntab.active{background:var(--teal);color:#fff}
+.ntab:hover:not(.active){background:#f0faf9;color:var(--teal)}
+
+/* hamburger */
+#hamBtn{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:40px;height:40px;border-radius:8px;border:1.5px solid var(--line);background:#fff;cursor:pointer;flex-shrink:0;margin-left:auto;transition:background .2s}
+#hamBtn:hover{background:#f0faf9}
+#hamBtn span{display:block;width:18px;height:2px;background:var(--ink);border-radius:2px;transition:all .22s}
+#hamBtn.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+#hamBtn.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+#hamBtn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* dropdown menu */
+#hamMenu{display:none;position:fixed;top:64px;right:0;width:240px;background:#fff;border:1px solid var(--line);border-radius:0 0 0 14px;box-shadow:-4px 8px 28px rgba(10,22,40,.12);z-index:299;max-height:calc(100vh - 64px);overflow-y:auto}
+#hamMenu.open{display:block}
+.hm-item{display:flex;align-items:center;gap:.7rem;padding:.75rem 1.2rem;cursor:pointer;border-bottom:1px solid var(--line);font-size:.8rem;font-weight:600;color:var(--ink);transition:background .15s}
+.hm-item:hover{background:#f0faf9;color:var(--teal)}
+.hm-item.mactive{background:#e8faf8;color:var(--teal)}
+.hm-num{width:22px;height:22px;border-radius:5px;background:var(--line);display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800;flex-shrink:0;color:var(--slate)}
+.hm-item.mactive .hm-num{background:var(--teal);color:#fff}
+
+@media(max-width:900px){.nav-tabs{display:none}#hamBtn{display:flex}}
+
+/* ── PAGES ── */
+/* KEY FIX: all pages hidden by default using display:none; active overrides to display:block */
+.page{display:none;margin-top:64px;min-height:calc(100vh - 64px);padding:3.5rem 2rem 5rem;background:#fff}
+.page.active{display:block}
+
+/* Cover is special: when active it uses flex */
+#page-0{padding:0}
+#page-0.active{display:flex;align-items:center;background:linear-gradient(135deg,#0a1628 0%,#0d1f3c 55%,#0a2a35 100%)}
+
+.inner{max-width:1200px;margin:0 auto}
+
+/* ── TYPOGRAPHY ── */
+.slide-eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);margin-bottom:.6rem}
+.slide-h1{font-family:var(--fd);font-size:3.2rem;font-weight:700;line-height:1.1;color:var(--ink);margin-bottom:.5rem}
+.slide-h1 em{font-style:italic;color:var(--teal)}
+.slide-sub{color:var(--slate);font-size:1rem;line-height:1.6;max-width:640px;margin-bottom:2.5rem}
+.slide-h3{font-family:var(--fd);font-size:1.4rem;font-weight:700;color:var(--ink);margin-bottom:.6rem}
+
+/* ── CARDS ── */
+.card{background:#fff;border-radius:16px;padding:1.6rem;box-shadow:0 2px 20px rgba(10,22,40,.06);border:1px solid var(--line)}
+.card-dark{background:var(--ink);border-radius:16px;padding:1.6rem;color:#fff}
+.card-teal{background:linear-gradient(135deg,#00b4a0,#1a9abf);border-radius:16px;padding:1.6rem;color:#fff}
+.card-soft{background:#f7fafd;border-radius:16px;padding:1.6rem;border:1px solid var(--line)}
+
+/* ── GRID ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+@media(max-width:800px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.mb1{margin-bottom:.9rem}.mb2{margin-bottom:1.8rem}
+
+/* ── STATS ── */
+.stat-num{font-family:var(--fd);font-size:3rem;font-weight:700;line-height:1;color:var(--ink)}
+.stat-num.teal{color:var(--teal)}
+.stat-num.gold{color:var(--gold)}
+.stat-num.green{color:var(--green)}
+.stat-label{font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--slate);margin-top:.3rem}
+.stat-sub{font-size:.78rem;color:var(--slate);margin-top:.2rem}
+
+/* ── COVER ── */
+.hero-orb{position:absolute;border-radius:50%;pointer-events:none}
+.orb1{width:520px;height:520px;background:radial-gradient(circle,rgba(0,180,160,.18) 0%,transparent 70%);top:-160px;right:-80px}
+.orb2{width:360px;height:360px;background:radial-gradient(circle,rgba(26,154,191,.13) 0%,transparent 70%);bottom:-80px;left:38%}
+.orb3{width:220px;height:220px;background:radial-gradient(circle,rgba(200,151,58,.1) 0%,transparent 70%);top:38%;right:18%}
+.hero-inner{position:relative;z-index:2;padding:5rem 2rem;max-width:1200px;margin:0 auto;width:100%}
+.hero-eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);margin-bottom:1.4rem;display:flex;align-items:center;gap:.7rem}
+.hero-eyebrow::before{content:'';display:block;width:32px;height:2px;background:var(--teal)}
+.hero-h1{font-family:var(--fd);font-size:5rem;font-weight:700;line-height:1.03;color:#fff;margin-bottom:1rem}
+.hero-h1 em{font-style:italic;color:var(--teal)}
+.hero-p{color:rgba(255,255,255,.62);font-size:1.05rem;line-height:1.75;max-width:560px;margin-bottom:2.2rem}
+.hero-divider{width:64px;height:3px;background:linear-gradient(to right,var(--teal),transparent);margin-bottom:2.2rem}
+.hero-tags{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:3rem}
+.htag{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:30px;padding:.38rem 1rem;color:rgba(255,255,255,.82);font-size:.78rem;font-weight:500}
+@media(max-width:700px){.hero-h1{font-size:3rem}}
+
+/* ── SCENARIO TOGGLE ── */
+.scenario-bar{display:flex;background:var(--ink);border-radius:40px;padding:.3rem;gap:.2rem;width:fit-content;margin-bottom:2rem}
+.sc-btn{padding:.55rem 1.4rem;border-radius:30px;border:none;font-family:var(--fb);font-size:.82rem;font-weight:600;cursor:pointer;transition:all .25s;color:rgba(255,255,255,.5);background:transparent}
+.sc-btn.active{background:var(--teal);color:#fff;box-shadow:0 2px 12px rgba(0,180,160,.4)}
+.sc-btn.cons.active{background:#ffffff}
+.sc-btn.opt.active{background:var(--green)}
+
+/* ── CHARTS ── */
+.chart-box{position:relative;height:280px}
+.chart-box canvas{max-height:280px!important}
+
+/* ── MISC ── */
+.inv-row{display:flex;align-items:center;justify-content:space-between;padding:.8rem 0;border-bottom:1px solid var(--line)}
+.inv-row:last-child{border-bottom:none}
+.inv-label{font-size:.85rem;color:var(--slate);font-weight:500}
+.inv-val{font-size:.95rem;font-weight:700;color:var(--ink)}
+.spend-seg{height:48px;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;color:#fff}
+.team-card{background:#fff;border-radius:14px;padding:1.3rem;border:1px solid var(--line);transition:transform .2s,box-shadow .2s}
+.team-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(10,22,40,.09)}
+.team-role{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:.3rem}
+.team-name{font-family:var(--fd);font-size:1.2rem;font-weight:700;color:var(--ink);margin-bottom:.4rem}
+.team-bio{font-size:.78rem;color:var(--slate);line-height:1.55}
+.adv-card{display:flex;gap:1rem;align-items:flex-start;padding:1.1rem 1.3rem;background:#fff;border-radius:12px;border:1px solid var(--line)}
+.adv-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.adv-title{font-size:.88rem;font-weight:700;color:var(--ink);margin-bottom:.25rem}
+.adv-desc{font-size:.77rem;color:var(--slate);line-height:1.5}
+.val-card{background:linear-gradient(135deg,var(--ink) 0%,#0e2a45 100%);border-radius:20px;padding:2rem;color:#fff;position:relative;overflow:hidden}
+.val-card::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(0,180,160,.18) 0%,transparent 70%);border-radius:50%}
+.val-yr{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.4);margin-bottom:.3rem}
+.val-num{font-family:var(--fd);font-size:3.2rem;font-weight:700;color:var(--teal);line-height:1}
+.val-sub{font-size:.83rem;color:rgba(255,255,255,.45);margin-top:.4rem}
+.val-return{background:rgba(0,180,160,.12);border:1px solid rgba(0,180,160,.25);border-radius:8px;padding:.5rem .9rem;display:inline-block;margin-top:.8rem;font-size:.8rem;font-weight:700;color:var(--tl2)}
+.partner-row{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.partner-chip{padding:.38rem .9rem;border-radius:8px;background:#f7fafd;border:1px solid var(--line);font-size:.77rem;font-weight:700;color:var(--ink)}
+.tl-item{display:flex;gap:1rem;margin-bottom:1.2rem}
+.tl-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:800;flex-shrink:0;margin-top:2px}
+.tl-title{font-weight:700;font-size:.9rem;margin-bottom:.2rem;color:var(--ink)}
+.tl-desc{font-size:.78rem;color:var(--slate);line-height:1.5}
+.divider{height:1px;background:var(--line);margin:1.4rem 0}
+.comp-table{width:100%;border-collapse:collapse;font-size:.8rem}
+.comp-table th{padding:.7rem .9rem;text-align:left;font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--slate);border-bottom:2px solid var(--line)}
+.comp-table td{padding:.65rem .9rem;border-bottom:1px solid var(--line)}
+.comp-table tr:last-child td{border-bottom:none}
+.comp-table .hl{background:#f7fafd}
+.badge-ln{background:var(--teal);color:#fff;padding:2px 8px;border-radius:20px;font-size:.68rem;font-weight:700}
+.badge-no{background:#fef0f2;color:var(--rose);padding:2px 7px;border-radius:20px;font-size:.68rem;font-weight:700}
+.badge-part{background:#fef9ec;color:var(--gold);padding:2px 7px;border-radius:20px;font-size:.68rem;font-weight:700}
+.watermark{font-size:.7rem;color:#bcc8d4;text-align:center;padding:1.5rem 0;letter-spacing:.08em;text-transform:uppercase}
+
+/* ── BOTTOM NAV ── */
+#footnav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,0.97);backdrop-filter:blur(10px);border-top:1px solid var(--line);z-index:200;padding:.65rem 2rem;display:flex;justify-content:space-between;align-items:center;box-shadow:0 -2px 16px rgba(10,22,40,.05)}
+.fnav-btn{padding:.45rem 1.3rem;border-radius:8px;border:1.5px solid var(--line);font-family:var(--fb);font-size:.78rem;font-weight:600;cursor:pointer;background:#fff;color:var(--ink);transition:all .2s}
+.fnav-btn:hover{background:var(--teal);color:#fff;border-color:var(--teal)}
+.fnav-btn:disabled{opacity:.3;cursor:default}
+.fnav-dots{display:flex;gap:.4rem;align-items:center}
+.fdot{width:7px;height:7px;border-radius:3.5px;background:var(--line);cursor:pointer;transition:all .2s}
+.fdot.active{width:22px;background:var(--teal)}
+
+@media(max-width:1180px){.nav-tabs{display:none}#hamBtn{display:flex}}
+.client-tile{padding:.85rem 1rem;border-radius:10px;background:#f7fafd;border:1px solid var(--line);font-weight:700;font-size:.85rem;color:var(--ink);text-align:center;transition:all .2s}
+.client-tile:hover{border-color:var(--teal);background:#f0faf9;transform:translateY(-2px)}
+.client-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:.7rem}
+.seg-head{display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem}
+.seg-dot{width:10px;height:10px;border-radius:50%}
+.pill{display:inline-block;padding:.3rem .8rem;border-radius:20px;background:#e8faf8;color:var(--teal);font-size:.72rem;font-weight:700;margin:.15rem .2rem .15rem 0}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.7rem}
+.cat{padding:.8rem 1rem;border-radius:10px;background:#f7fafd;border:1px solid var(--line);border-left:3px solid var(--teal)}
+.cat b{font-family:var(--fd);font-size:1.5rem;color:var(--teal);display:block;line-height:1.1}
+.cat span{font-size:.75rem;color:var(--slate)}
+.mini-table{width:100%;border-collapse:collapse;font-size:.78rem}
+.mini-table th{text-align:left;padding:.55rem .7rem;font-size:.68rem;text-transform:uppercase;letter-spacing:.07em;color:var(--slate);border-bottom:2px solid var(--line)}
+.mini-table td{padding:.55rem .7rem;border-bottom:1px solid var(--line);vertical-align:top}
+.mini-table tr:last-child td{border-bottom:none}
+.eng-col{border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#fff}
+.eng-head{padding:.8rem 1rem;color:#fff;font-weight:700;font-size:.85rem;text-align:center}
+.eng-body{padding:.7rem}
+.eng-item{font-size:.74rem;color:var(--ink);padding:.45rem .6rem;border-radius:8px;background:#f7fafd;margin-bottom:.4rem;line-height:1.4}
+
+/* ===== Professional polish ===== */
+:root{--ink:#0b1b2e;--teal:#0e7c7b;--tl2:#8fd3cf;--sky:#2c6a8c;--violet:#1f3a5f;--gold:#5b6b7d;--amber:#5b6b7d;--green:#0e7c7b;--rose:#8a3a3a;--slate:#5f6f82;--line:#dde3ea}
+body{-webkit-font-smoothing:antialiased}
+.page{padding:4rem 3rem 5.5rem}
+.inner{max-width:1120px}
+.slide-eyebrow{font-size:.7rem;letter-spacing:.2em;color:var(--teal);display:flex;align-items:center;gap:.7rem;margin-bottom:.9rem}
+.slide-eyebrow::before{content:'';width:28px;height:1px;background:var(--teal)}
+.slide-h1{font-size:2.7rem;font-weight:600;letter-spacing:-.01em;line-height:1.12;margin-bottom:.8rem}
+.slide-h1 em,.hero-h1 em{font-style:normal;color:var(--teal)}
+.hero-h1 em{color:var(--tl2)}
+.slide-sub{font-size:1rem;max-width:720px;margin-bottom:2.2rem;line-height:1.65}
+.slide-h3{font-size:1.2rem;font-weight:600}
+/* flat, quiet containers */
+.card,.card-soft,.team-card,.adv-card,.cat,.eng-col,.client-tile{box-shadow:none!important;border-radius:3px!important}
+.card,.team-card,.adv-card,.cat,.eng-col,.client-tile{border:1px solid var(--line)!important;background:#fff!important}
+.card-soft{background:#f5f7fa!important;border:1px solid var(--line)}
+[style*="border-top:3px"]{border-top:1px solid var(--line)!important}
+.card-dark{border-radius:3px;background:var(--ink)}
+.team-card:hover,.client-tile:hover{transform:none;box-shadow:none;border-color:var(--teal)!important;background:#fff!important}
+.cat{border-left:1px solid var(--line)!important}
+.cat b{font-weight:600;color:var(--ink)!important}
+/* stat numbers: one voice */
+.stat-num{font-weight:600}
+.stat-num.gold,.stat-num.green,.stat-num.teal,.stat-num[style*="var(--violet)"],.stat-num[style*="var(--gold)"],.stat-num[style*="var(--green)"]{color:var(--ink)!important}
+.card .stat-num{color:var(--ink)!important}
+.stat-label{letter-spacing:.06em}
+/* remove chips, badges, coloured headers */
+.pill{background:none!important;border:1px solid var(--line);color:var(--ink)!important;border-radius:3px;font-weight:600;padding:.3rem .7rem}
+.eng-head{background:var(--ink)!important;font-weight:600;letter-spacing:.02em}
+.eng-item{background:#f5f7fa;border-radius:2px}
+.adv-icon{background:#eef2f6!important;color:var(--teal)!important;border-radius:3px}
+.adv-icon:empty{display:none}
+.badge-no,.badge-part{background:none!important;color:var(--slate)!important;font-weight:500;padding:0}
+.badge-ln{border-radius:2px;background:var(--ink)}
+.seg-dot{width:8px;height:8px;border-radius:0;background:var(--teal)!important}
+/* cover */
+#page-0.active{background:var(--ink)!important}
+.hero-orb{display:none}
+.hero-h1{font-size:4.2rem;font-weight:600;letter-spacing:-.015em}
+.hero-divider{background:var(--teal);width:48px;height:2px}
+.hero-p{color:rgba(255,255,255,.7);font-size:1.05rem}
+.hero-tags{gap:0}
+.htag{background:none;border:none;border-radius:0;border-left:1px solid rgba(255,255,255,.28);padding:0 1.2rem;color:rgba(255,255,255,.85);font-size:.8rem}
+.htag:first-child{border-left:none;padding-left:0}
+#page-0 button{border-radius:3px!important;box-shadow:none!important;background:var(--teal)!important}
+/* dark stat cards */
+.val-card{background:var(--ink)!important;border-radius:3px;border:none}
+.val-card::before{display:none}
+.val-num{font-weight:600}
+.val-num[style]{color:var(--tl2)!important}
+/* nav */
+.ntab{border-radius:2px;letter-spacing:.06em}
+.ntab.active{background:var(--ink)}
+.fnav-btn{border-radius:2px}
+.fnav-btn:hover{background:var(--ink);border-color:var(--ink)}
+.fdot{border-radius:0}
+.fdot.active{background:var(--ink)}
+.logo-img{border-radius:4px}
+.comp-table th{color:var(--ink)}
+.comp-table .hl{background:#f5f7fa}
+
+.ntab{padding:.3rem .42rem;font-size:.62rem}
+.nav-inner{gap:.8rem}
+@media(max-width:1400px){.nav-tabs{display:none}#hamBtn{display:flex}}
+[style*="min-width:172px"]{min-width:0!important;flex:1 1 0!important}
+
+/* ===== Demo CTA + modal ===== */
+.nav-cta,.cta-btn{background:var(--teal);color:#fff;border:none;border-radius:2px;font-family:var(--fb);font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background .2s}
+.nav-cta{font-size:.68rem;padding:.6rem 1.1rem;margin-left:.6rem;flex-shrink:0;white-space:nowrap}
+.cta-btn{font-size:.78rem;padding:.85rem 1.8rem}
+.nav-cta:hover,.cta-btn:hover{background:var(--ink)}
+#hamBtn{margin-left:0!important}
+@media(max-width:1400px){.nav-cta{margin-left:auto}}
+@media(max-width:520px){.nav-cta{padding:.55rem .7rem;font-size:.62rem}.logo-name{display:none}}
+#page-0 button.btn-ghost{background:transparent!important;border:1px solid rgba(255,255,255,.55)!important;color:#fff;border-radius:3px;padding:.8rem 2rem;font-size:.92rem;font-weight:700;font-family:var(--fb);cursor:pointer;margin-left:.8rem;box-shadow:none!important}
+#page-0 button.btn-ghost:hover{background:rgba(255,255,255,.1)!important}
+#demoModal{display:none;position:fixed;inset:0;z-index:500;background:rgba(11,27,46,.62);align-items:flex-start;justify-content:center;overflow-y:auto;padding:5vh 1rem}
+#demoModal.open{display:flex}
+.demo-panel{background:#fff;width:100%;max-width:520px;border-radius:3px;padding:2.2rem 2.2rem 2rem;position:relative;margin:auto 0}
+.demo-close{position:absolute;top:.9rem;right:1rem;background:none;border:none;font-size:1.5rem;line-height:1;color:var(--slate);cursor:pointer}
+.demo-close:hover{color:var(--ink)}
+.demo-title{font-family:var(--fd);font-size:1.9rem;font-weight:600;color:var(--ink);margin-bottom:.4rem}
+.demo-sub{font-size:.85rem;color:var(--slate);line-height:1.6;margin-bottom:1.5rem}
+.demo-field{margin-bottom:1rem}
+.demo-field label{display:block;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);margin-bottom:.35rem}
+.demo-field input,.demo-field select{width:100%;padding:.7rem .8rem;border:1px solid #c5cdd8;border-radius:2px;font-family:var(--fb);font-size:.9rem;color:var(--ink);background:#fff}
+.demo-field input:focus,.demo-field select:focus{outline:2px solid rgba(14,124,123,.35);border-color:var(--teal)}
+.demo-field.err input,.demo-field.err select{border-color:#a33}
+.demo-msg{display:none;font-size:.72rem;color:#a33;margin-top:.3rem}
+.demo-field.err .demo-msg{display:block}
+.demo-hp{position:absolute;left:-9999px;height:0;overflow:hidden}
+.demo-submit{width:100%;margin-top:.4rem;padding:.9rem;background:var(--teal);color:#fff;border:none;border-radius:2px;font-family:var(--fb);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.demo-submit:hover{background:var(--ink)}
+.demo-submit:disabled{opacity:.6;cursor:default}
+.demo-error{display:none;background:#fbeeee;border:1px solid #e3b5b5;color:#7a2a2a;padding:.7rem .9rem;border-radius:2px;font-size:.8rem;line-height:1.5;margin-bottom:1rem}
+.demo-done{display:none;text-align:left}
+.demo-done .demo-sub{margin-bottom:1.2rem}
+.hero-h1{font-size:3.7rem!important}
+
+/* ===== Photography ===== */
+.ph{background-color:#dfe6ee;background-size:cover;background-position:center;background-repeat:no-repeat;height:96px;margin:-1.6rem -1.6rem 1.1rem;filter:saturate(.85)}
+.card:has(> .ph),.cat:has(> .ph),.eng-col:has(> .ph){overflow:hidden}
+.cat .ph{height:92px;margin:-.8rem -1rem .75rem}
+.eng-col .ph{height:104px;margin:0}
+.ph-wide{height:80px;margin:-1.6rem -1.6rem 1.2rem;background-position:center 40%}
+[style*="min-width:172px"] .ph{height:84px}
+.team-role{margin-top:0}
+#page-0.active{background:linear-gradient(90deg,#0b1b2e 0%,#0b1b2e 40%,rgba(11,27,46,.78) 100%),url('https://images.unsplash.com/photo-1637929476734-bd7f5f78e40a?auto=format&fit=crop&w=1800&q=70') center/cover no-repeat,#0b1b2e!important}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="topnav">
+  <div class="nav-inner">
+    <div class="logo-wrap" onclick="setPage(0)">
+      <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxISERAUExAWEBEWExcRFRUVGRgQEBATFhUYGBYWGBYYHTQgGxolJxgdIjEiJSo3LjE6Fx8zODMuNygtLisBCgoKDg0OGxAQGi0lHh8tKy0tLS0rKy0tLS0tLS0tLS0tLS0yLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLf/AABEIAMgAyAMBEQACEQEDEQH/xAAbAAEAAgMBAQAAAAAAAAAAAAAABQYDBAcBAv/EAEQQAAEDAQMHBwgJBAIDAQAAAAEAAgMRBBIhBQYWMUFRUxMicZGS0dIyNGFzobGywRQjM0JScoGC8BUkQ8I1g2Lh8Qf/xAAaAQEAAwEBAQAAAAAAAAAAAAAAAwQFAgEG/8QAKxEAAgECBAUFAQEAAwAAAAAAAAECAxEEFCExEhMVQWEiMjNRUgUjNEJx/9oADAMBAAIRAxEAPwDuCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAqOnDeAe0O5XMp5Mvqa/I04bwD2h3JlPI6mvyNOG8A9odyZTyOpr8jThvAPaHcmU8jqa/I04bwD2h3JlPI6mvyNOG8A9odyZTyOpr8jThvAPaHcmU8jqa/I04bwD2h3JlPI6mvyNOG8A9odyZTyOpr8jThvAPaHcmU8jqa/I04bwD2h3JlPI6mvyNOG8A9odyZTyOpr8jThvAPaHcmU8jqa/I04bwD2h3JlPI6mvyNOG8A9odyZTyOpr8jThvAPaHcmU8jqa/I04bwD2h3JlPI6mvyNOG8A9odyZTyOpr8jThvAPaHcmU8jqa/I04bwD2h3JlPI6mvyNOG8A9odyZTyOpr8jThvAPaHcmU8jqa/I04bwD2h3JlPI6mvyNOG8A9odyZTyOpr8jThvAPaHcmU8jqa/JSVeMcIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAmg1C8PbBengQBeXR74NqzZPlk8iJzxvANOtcOrGOhJGjOXtRt6O2rgnrHeuefDa5JlKv0alpydNH5cT2jeQbvWuo1IvuRyoTjuaqkuR23C8eh4wvbeRcIAg0C8GwXoCAIAgCAIAgCAIAgCAy2ezvkN1jC924Cv8C5lOMTuNOU/aTUGac5AL3Mir+I4+zBQPEpbFqGBl/20Mr82GNdcNsjEmAukY1OrAuXKxMt7HcsDG9lISZnzVo17H40OJBFd4Xuaj3R6/58uzJSHJMNmZI4MFpnjAcQ7ACu0DUoZVZTf0ixHDwpQbtdo+RliWaxTSNPJyRu+5+DDf0nqTlpVEmec9youUVqiPdb5voF/lX3/pFL143qXdVdy74IqpYhlUm8PxX1N5+VpYLFA8uvyvdXn87mYnu61zy4yqWRM60oUYvuzLLkmG0sjLmCz2iRpcA3bTaRq/8Aq5VWUHZbHrw8aqV1ZkUzM6atHPY0VwxJLugKfMxtoVl/PkmeszWYXXBbIy/HmgVdXovLzMS7oLBR7SMMuas2PJvZNTY13O9uC6jiI9ziWBfZkNaLM+M3XsLDuIp/ApoyTKtSk4swrs4YQBAEAQBAEAQBAEASzbH/AITGRci8qDJI7k4G4uccK02CvvVerVcXZbluhhuL1S0RN5ZtrrKyL6MxrYXAHlALxcdxr71BTjzH6i5WnyklT2I/OYVkgtLfJka13Q5uz+blJRW8X2IcTe8ZrZm/bbLeypFuIbJ2QfCuE7UiWUL4hMszW3eUdG0OrVxoec94wpU4bKKrc0tlofYJpUitac3AltdYrXFea3G5C2XIxilnaB9RMw/sdjhTdiVM6nEr90VI0HCTXZkELOTYWx/e+lXP1oQpXK07lVQ/yt5J+1ZHMs8II+ohYAAfvuNMOjAKJVOFO3ctSoOc19ImC80vAEEA803Q51NWOxRblu6Plzb1wvaARRwqecx+6o6aJsLX3KxYbLdynLuAdJ2gPErTl/kjNjG2IZo5rto+e0u8mMOPS53z713V2UER4e6cpvZG/ke3utMcv0pjXQsBN8i6WncKbt6jqR5bXDuSUqnNT5i0+yDyxkfkwJIncpA7yXbW12O9ysUqt9HuU69BR9UdURCmsVbXC9DfYIAgCAIAgCAICQyJk42iZrNTdbjuaoq01GPknw9HmTsWS2WyzTVsrr0DWGkbtTCRvHeqsYzXrNGc4SfKehjsMDo62S0isMn2Ug8kO2UOwr2cr+uJzCMo3pT2exj+guNntFmfjJCeVjP4m68Pb1o5LiUl3PFSfLdPuifgEbWttTzqs7R0DWf1NQoHdvhRcjwxSqS7FNyrnDLKSGOMUexrebh6SPcr1OhGOsjKrYuU5enYjI7VI01D3A7wSCpHBfRXVWS2LLkHOtwcGTm804B/3m9O8KrWwy3iX8NjnxcMiyNycKg4XROZ/Riw/MqtxXNFU43v2K9l/Ot1SyA3QMDJrLvy+j0qzSw+l2Z+Ix3aBV5LVI41c9zjvJJPtVpQj9GdKpKWrZJZLzhmiIq4yx7WuN7D0E4hRTw8WWKOKnT3d0XKV0b2PtTD/ge2u8DHH0ihVLWPpNW8Zx40QklhcLPZ7KzCSU8rJ/4t219g/ap1L1Of0VXTfAqa7i12d012y2cUgjNJJD5LnbanaV7GSj657sSg5/5w2Rmstrs0JbZWgzNebsjtbbxw1D5LhxlL1ncJ04/5IrOW8nGzzOZrGtp3tKtUZ8SM3EUeXOxoKYg2YQBAEAQBAEAQFyzUsT/o0r4yGSyG61x2Bvz1qjiJLjszWwdGXKbi9WbFvtUUTLtscy0SbAxtHgek17lxCMpP07ElScIL/V3ZpjOez3OTNncYqUoXXqdZ+aky873uRPG07cLWhM5OyhZ53Rlj6SNF2j8HuYdYO/f+iglCUVqWqdalVem5E56ScnFDA083E/tbS6P5uU2GXFK5Wx8uCCiU5XTJ8BegLwF4hkk/pZN7nXCAdtwOp7lQaXONlOeUv3KQr/YxjxegIC3ZkTX2zQOxaQHU9BwcOjUqWJSTTRq4CV04Mmcp2+CAyGR5Mjxdo3F4ZsA3b/1UEITki1Vq0oXvuQzs57Pc5IWdwi1Ua64aftPzU+Xne9yq8bDh4VE3snTQyMu2NzbPLtDm3pCOknvUc4yi7z2JabhONqejNTOuwv8Ao0T3uD5Yzce4bWu+errXeHn6mjjF0m6ak90U5Xuxjp3WoQ9CAIAgCAIAvAXqG0iz5PikpV90hldjnnWqDipVrGzGao4ZSKRLIXElxJcTUk6ySryjwrQx3Jv1M+F7pY88n1G8tIIJBGII1ii8lG51GVndFzy5ZRabHHOMZGMDid4++Ov3KlSlwT4TVrw5tBTKUryMjyF6AgLSzLkf9PMVfrbvJ3aaxXX1KnynzbmksTBYfg7lWVtIzdmF6AgLpm/Y/o9kltBwe6MlvoFOb1mioVZKdThRr4anyqTqPcp0shcSXElxNSTrNVdjZaIypS422z4XTWhzdmSCZzHBzTdcDUEbKLmSTVjqE3F3TLvbLQ2fJ8slKOc0X6fjY4dyoRjw1bGzOanh3LuURaJiasIAgCAIAgCALwE9lK3sfYrMwOF9rjebtFLwB/m9V4QfMci7VqqVGKIFWexS3CAICXydl58UMkV0Pa4EAk0uXhj0qCdG8uItU8VwR4LEQpkVd9gvQEAQBebiz3CaBhGxe5MW3L75LPHBdDWtDQSD5d3VhsUEKHDK5bqYpypcBDqx3Km4XlxewTQInbFlBjbBPGXc90go3bQ3MejAqvKm3UUi9CqlRcbkGrHYo7Hi9AQBAEAQBAeoCxQ5tB1l5flCDyZfdphhXCtfQqrr2nwl+OEvS4yuK12RQe4QBAEvZ2CdixZv5uC0xueZCyji2gFdQHeqtWvwSsXsPg+bHibIK1RXHvbWt1xbXfQqxF3KlSNnYxL1nD2PV6tha6LVkvNJs0UchmLbwrS6DT2qlPEuLsadHAKcL3NrQdvHPZHeuc0/ok6cvsic4s3hZmNcJC+rruqlMCfkpqNdyexWxOFVJXTIBWOxQ21C97HpP5u5vi0se4yFl113VergO9Vq1fhexewuFVVXuS2g7eOeyO9Q5p/RZ6cvs1cq5pthhkk5YuuitLoFfau6eIbklYirYFQg3xFUVwzdggCAIAgCAID1eA6DZP8AjP8Apd81nv5jdh/xjnq0FsYbC9PAgCBl+zC83f6w/C1Z2J95t4D2MpWUvtpvWP8AiKvU/aZNb3s1l0iI9TuDo2TCf6e2mvkXUpr1FZlT5Dfo3y6KHy8/45OtyvpRMhyq3sYp5nnB7nHbRxJ967SXYilKezMK6OAgL1mB9jL+f/ULPxO6Nn+fpBlet0dq5WSgmpfdSl+lK+jYrEXCxTqqq56GlajO0fWGUA4c68AetSR4exBUdWOjNNSEOoQBAEAQBAEB6vAdBsn/ABn/AEv+az38xuw/4xz1aC2MJhegIAgZfswvN3+sPwtWdifebeA9jKVlL7ab1j/iKvU/aZNb3s1l0iI9TuDpWQ5blijdSt2IupvpUrMqK9Q+hw8rUEROm7OAe0O5S5V/ZV6hH8lay5lEWiUyBt0UAocdXQrVKm4Iz8RV5juiPUpAEBeswPsZfWf6hZ+K1Zs/zva2YbTnmWve3kAbri2t7XQ9C6WGTW5zP+hwytwkLl/LxtIYOTuXSTrrX2KajRcNypiMVzexCqxe5S33YQ9CAIAgCAID1eA6RkSJr7FGxxoHRlpproSQs2o7VLo38PwuiotmlofZuI/tN8K6zEyHJUvsjM4s3oYIb7HOLrwFCQRj0BS0q05OzIMThYQp3i9SrK4Zu24Xg7l9zEcPo78f8h+Fqz8QnxG1gGuWyl5S+2m9Y/4ir1PRGTW92hrLvQj1Z6vNmFqdEya4f08Y/wCF3uKzZp8w3aMo5fVnOlpIw3uwlzy2lgjuLBe3DsXnMFw5KWp/yf6hUMStdDYwDioWZnmzTs7nOcZH1cS485us69i4VedrEksJSk73NPKOatnZFI8PeXNYXAEtoSATuUkK827Mhq4OEYXTKWry0RktBAEAQBAEAQHqAm7HmvPLG2RpZdcKgEm97lWlXjGVi7TwlScFJMh5oixxa4UcDQg7CFOmpK6KsuOLsyXyVm3JaIxI1zQKkUNa4dAUFStGDsizSwk6seK+hH5TsLoJHRuIJFMRqxFdqmhU40QVqXLk0zUXRF20JfJmbs8wvBoYzY52FegKCdaMdy3RwlWa0N6bMycDBzHHdUj5LhYmJLL+fNaogLVZnxuLXtLHDYe/crMZxkilUpyhL1GFdI4W5NZJzcltEd9j2gVLaGtcOgKtUrRiy5RwkqsLpmvlnI0lmLQ8ghwNC3VhsxXdOqpkdfDypPUw5Lye+eQMZQEgmp1AfouqlRQ3OKVGVSdkSltzUlije8vYQ0FxArXD9FFHEqTsWamBlBXK+rJR0TsyWyTkCW0NLmFgAdd5xINQAdg9KgqVlB2ZboYaU46G9oZafxR9bvCo8zD6J8jVtuYLdmtPFG6RzmXWipoTX2hdRrwbskR1MHOEbtkErC0KIXoCAIAgCAID1eA6fmx5pB+X5lZdb3s+jwvxIi87shcoDLGPrGjnAffaPmFJQrW9LK+Nw3H6lubGZHmo/O73rnEO8yTA3VKzKtnl53J0N+EK3hvYjMx3ys8zUyYJ5ucKsYLxG/cP5uSvU4YnuCo8yd/ovOWMpss0d5wr91rRhU/wKjTg5s16tZUoELk/PJr3hr4uTBNA4OvAdOGpTTwziroqUv6ClKzRI50ZObNA8057Gl7TtwxIUdGbjInxVFVKd+5zZaZ8+dCzG82/e75LOxPvN7AfGbWc+TuXgcAKvbz2dI2fqMFxRnwyJMXS5kPJG5i5PuxulIxeaD0NH/v3KXEz4pW+iDAUeFcTJjOLzWf1Z9yhpe9FnFfEzli1ux84y+5gebyetPwtWbivcbf874zYy1l6SGS42zmQXQbwrtruC8p0oyWrO6+InTlaKuQmV85pJInsdZjGHClST7qKeFCKd0ynXxkpQtKJVVc7GY/sIAgCAIAgCA9XgOnZs+aQfl+ZWXW97Po8J8SMmT8ptlfKzU+N5aRvANA4ehcyhwq51TrKbce5tWazNjDg0UBcXEbKnWuXK5LCCjojnuePncnQ34QtHDfGjBx2tVkn/wDn8gvzN2kNI6BXvUeLWxY/muzaNnP+BxZE8YtaSD6L1Ke5R4VpXRL/AEotpNdilxRlzg0CpJAA3kq7KVo6mRBSk9Dq1pNyB14+TGanobistaz0Po5+mnqcnWstj5t7nQsxvNv3u+SzsT7zdwHxEpZ7cHSzR/eZdPS1w71DKNkn9lmNROTh9HlutTYWxgAC9IyNo2c52PsqiTk7iclTSsfGcXms/qz7l1S96OMV8TOWLWPnGX3MHzeT1p+FizcV7ja/n/GSOUcvwwPuPJvUBwFcCuIUpSWhPVxMKbtIrOdeWorRGxsZJIfU1FMKHerNClKL1M/GYiNWK4Srq4Zq8hAEAQBAEAQHqA6dmyf7SH8vzKy6y/0Z9DhXaiijW22Ohtkr2GhErugiuoq5CHFTszKqVZQrNov+ScosnjD2npG1rtoWfUpuOhs0a0akbplFzx87k6G/AFoYZ/52MbHO9Z3NDJVvdBK2RuNNY1XmnAj+blJUhxohoVHCVzo9iyhDaWYEOBHOYdY9BCzXBwZuwrU6qseQZKs0JL2xtYR94nV16k45y0EaVKn6kit515xNe0wxG8D5TxqNNg71YoUGndlHGYtP0xKir1tTKudCzHP9t+93yWbiPebuA+LUh8r5SNnyg94F4XQC2tLwujb/ADUpqdLjpoqV6/KrtowT5bNqtVl5txrZWUFb2JeMdS9VLggzx4rnVYlvziP9rP6s+5VKN+M0sS1ymctWr3PnXoXzMH7CT1p+Fiz8SvUbX892iS9tyLBK69JHedSlakYfoVFGpKK0LNShTm7yIvLWQLMyCZzYqODCQanAgdKkp1ZuRWr4alGm7IoK0VqjE8Hi9AQBAEAQBAEBmZaXgUD3AbgSB7Fw4K9ztVZpWTMTnVNSak7Suu1kca3uz7jmc3yXFtdxIr1LzhT3OoylHZny95cakknecT7V6rLRHjd3dnyvTzVbHrXU1Gi5cV3OlJx2PuSZzvKcXdJJ968UEeuo3uY13c417hBc+myEaiR0FcuKZ0ptaJnhNdZqV6lZWRy3d3YBTsO59GVx2k/qvFBLU6429D4XRyZI53Nwa9zduBI9y5cE9zpTktj7+lycR/aKcETrmS+zx1peQQXuIOwuPzRQieObfcwro4vfYIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAv2hMHEl62+FZ2ambvT4DQmDiS9bfCmamOnwGhMHEl62+FM1MdPgNCYOJL1t8KZqY6fAaEwcSXrb4UzUx0+A0Jg4kvW3wpmpjp8BoTBxJetvhTNTHT4DQmDiS9bfCmamOnwGhMHEl62+FM1MdPgNCYOJL1t8KZqY6fAaEwcSXrb4UzUx0+A0Jg4kvW3wpmpjp8BoTBxJetvhTNTHT4DQmDiS9bfCmamOnwGhMHEl62+FM1MdPgNCYOJL1t8KZqY6fAaEwcSXrb4UzUx0+A0Jg4kvW3wpmpjp8BoTBxJetvhTNTHT4DQmDiS9bfCmamOnwGhMHEl62+FM1MdPgNCYOJL1t8KZqY6fAaEwcSXrb4UzUx0+A0Jg4kvW3wpmpjp8BoTBxJetvhTNTHT4FnVYvhAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQH/9k=" class="logo-img" alt="LifeNome"/>
+      <span class="logo-name">Life<span>Nome</span></span>
+    </div>
+    <div class="nav-tabs" id="navTabs"></div>
+    <!-- Hamburger -->
+    <button type="button" class="nav-cta" onclick="openDemo()">Schedule a Demo</button>
+    <button id="hamBtn" onclick="toggleHam()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div id="hamMenu"></div>
+</nav>
+
+
+<div class="page active" id="page-0">
+  <div class="hero-orb orb1"></div>
+  <div class="hero-orb orb2"></div>
+  <div class="hero-orb orb3"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Company Introduction · For Partners &amp; Clients</div>
+    <h1 class="hero-h1">World's Premier<br><em>Precision Health<br>Intelligence Platform</em></h1>
+    <div class="hero-divider"></div>
+    <p class="hero-p">The intelligence infrastructure powering the global longevity economy — from genomics to gut microbiome, wearables to biological age. The "Intel Inside" of precision health.</p>
+    <div class="hero-tags">
+      <span class="htag">600K+ Users · 14 Countries</span>
+      <span class="htag">B2B(2C) Platform</span>
+      <span class="htag">20+ Enterprise Clients</span>
+      <span class="htag">Launch in &lt;90 Days</span>
+    </div>
+    <button onclick="setPage(1)" style="background:var(--teal);color:#fff;border:none;border-radius:10px;padding:.8rem 2rem;font-size:.92rem;font-weight:700;font-family:var(--fb);cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(0,180,160,.35)">Explore LifeNome →</button>
+    <button type="button" class="btn-ghost" onclick="openDemo()">Schedule a Demo</button>
+  </div>
+</div>
+
+<div class="page" id="page-1">
+  <div class="inner">
+    <div class="slide-eyebrow">Why LifeNome</div>
+    <h1 class="slide-h1">A <em>$62B</em> Market at Inflection</h1>
+    <p class="slide-sub">Three macro tailwinds are converging to create the largest consumer health opportunity since genomics — and brands need a faster way to serve it.</p>
+    <div class="g3 mb2">
+      <div class="card"><div class="ph" role="img" aria-label="Older adults enjoying an active life" style="background-image:url('https://images.unsplash.com/photo-1758686254555-9bcaba0dd46d?auto=format&fit=crop&w=640&q=70')"></div><div class="slide-h3">Aging Population</div><div class="stat-num teal" style="font-size:2.4rem">$62B</div><div class="stat-label">Longevity &amp; precision health market by 2029</div><div class="divider"></div><p style="font-size:.8rem;color:var(--slate);line-height:1.6">34% of Americans are 50+ and the majority will manage chronic disease after 65. Prevention is the only scalable answer.</p></div>
+      <div class="card"><div class="ph" role="img" aria-label="DNA double helix" style="background-image:url('https://images.unsplash.com/photo-1637929476734-bd7f5f78e40a?auto=format&fit=crop&w=640&q=70')"></div><div class="slide-h3">Personalization Wave</div><div class="stat-num teal" style="font-size:2.4rem">270%</div><div class="stat-label">Adherence lift: personalized vs. generic</div><div class="divider"></div><p style="font-size:.8rem;color:var(--slate);line-height:1.6">57% of US consumers are willing to share biological and wearable data for personalized health. Adherence to lifestyle changes over 6 months is 270% higher.</p></div>
+      <div class="card"><div class="ph" role="img" aria-label="Analytics dashboard" style="background-image:url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=640&q=70')"></div><div class="slide-h3">Industry Boom</div><div class="stat-num teal" style="font-size:2.4rem">2,000+</div><div class="stat-label">Longevity companies &amp; clinics</div><div class="divider"></div><p style="font-size:.8rem;color:var(--slate);line-height:1.6">Across North America, the Middle East and Latin America, with an estimated $4.4B of PE and venture investment globally. Longevity biomarkers grew 870%+ annually from 2020–24.</p></div>
+    </div>
+    <div class="card-dark">
+      <div class="slide-h3" style="color:#fff;margin-bottom:1.2rem">The Problem LifeNome Solves for Brands</div>
+      <div class="g3">
+        <div style="text-align:center;padding:.8rem"><div style="font-family:var(--fd);font-size:2.8rem;font-weight:700;color:var(--tl2)">15.2mo</div><div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.45);margin-top:.3rem">Avg time to market for a precision health MVP</div></div>
+        <div style="text-align:center;padding:.8rem;border-left:1px solid rgba(255,255,255,.1);border-right:1px solid rgba(255,255,255,.1)"><div style="font-family:var(--fd);font-size:2.8rem;font-weight:700;color:#ffffff">$3.2M+</div><div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.45);margin-top:.3rem">Avg cost of precision health MVP development</div></div>
+        <div style="text-align:center;padding:.8rem"><div style="font-family:var(--fd);font-size:2.8rem;font-weight:700;color:var(--teal)">100+</div><div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.45);margin-top:.3rem">New longevity papers published monthly</div></div>
+      </div>
+      <div style="text-align:center;margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid rgba(255,255,255,.1)"><span style="color:var(--tl2);font-weight:700;font-size:.88rem">LifeNome delivers: &lt;90 days to market · as little as $50K for an MVP · the most comprehensive choice of biomarkers in the market</span></div>
+      <div style="text-align:center;margin-top:.8rem;font-size:.7rem;color:rgba(255,255,255,.35)">Market sizing source: PA Consulting (2023)</div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-2">
+  <div class="inner">
+    <div class="slide-eyebrow">Platform</div>
+    <h1 class="slide-h1">Precision Health <em>Intelligence Platform</em></h1>
+    <p class="slide-sub">The "Intel Inside" of precision health — an end-to-end intelligence platform that partners embed to power their precision health products in weeks, not years.</p>
+    <div style="display:flex;gap:.7rem;overflow-x:auto;padding-bottom:.5rem;margin-bottom:.4rem;scrollbar-width:none"><div class="card" style="min-width:172px;flex-shrink:0;text-align:center;border-top:3px solid var(--teal)"><div class="ph" role="img" aria-label="Scientist working in a laboratory" style="background-image:url('https://images.unsplash.com/photo-1614935151651-0bea6508db6b?auto=format&fit=crop&w=640&q=70')"></div><div style="font-weight:700;font-size:.85rem;margin-bottom:.4rem">Testing</div><div style="font-size:.73rem;color:var(--slate);line-height:1.5">Branded CLIA/CAP lab testing: DNA · Microbiome · Methylation · Blood biomarkers · Proteomics*</div></div><div style="font-size:1.5rem;color:var(--teal);align-self:center;flex-shrink:0">&rsaquo;</div><div class="card" style="min-width:172px;flex-shrink:0;text-align:center;border-top:3px solid var(--sky)"><div class="ph" role="img" aria-label="Laptop showing data" style="background-image:url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=640&q=70')"></div><div style="font-weight:700;font-size:.85rem;margin-bottom:.4rem">Diagnostics</div><div style="font-size:.73rem;color:var(--slate);line-height:1.5">1,000+ API analytics insights · 800+ multi-omics trait reports · 53 industry solutions</div></div><div style="font-size:1.5rem;color:var(--teal);align-self:center;flex-shrink:0">&rsaquo;</div><div class="card" style="min-width:172px;flex-shrink:0;text-align:center;border-top:3px solid var(--violet)"><div class="ph" role="img" aria-label="Phone showing a supplement recommendation" style="background-image:url('https://images.unsplash.com/photo-1603539947678-cd3954ed515d?auto=format&fit=crop&w=640&q=70')"></div><div style="font-weight:700;font-size:.85rem;margin-bottom:.4rem">Recommendations</div><div style="font-size:.73rem;color:var(--slate);line-height:1.5">Programs &amp; services (nutrition, gym routines, treatments) · Products (supplements, skin &amp; hair care, meals)</div></div><div style="font-size:1.5rem;color:var(--teal);align-self:center;flex-shrink:0">&rsaquo;</div><div class="card" style="min-width:172px;flex-shrink:0;text-align:center;border-top:3px solid var(--gold)"><div class="ph" role="img" aria-label="Smartphone app" style="background-image:url('https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=640&q=70')"></div><div style="font-weight:700;font-size:.85rem;margin-bottom:.4rem">Engagement</div><div style="font-size:.73rem;color:var(--slate);line-height:1.5">White-label apps &amp; SDKs: Longevity · Fitness &amp; Performance · Women's Health · Weight Loss · Chronic disease</div></div><div style="font-size:1.5rem;color:var(--teal);align-self:center;flex-shrink:0">&rsaquo;</div><div class="card" style="min-width:172px;flex-shrink:0;text-align:center;border-top:3px solid var(--green)"><div class="ph" role="img" aria-label="Doctor consulting a patient by video" style="background-image:url('https://images.unsplash.com/photo-1758691462743-f9fc9e430d39?auto=format&fit=crop&w=640&q=70')"></div><div style="font-weight:700;font-size:.85rem;margin-bottom:.4rem">Coaching</div><div style="font-size:.73rem;color:var(--slate);line-height:1.5">Multi-omics certified telehealth providers: Physicians · RDs · Trainers</div></div></div>
+    <div style="font-size:.7rem;color:var(--slate);margin-bottom:2rem">*Proteomics availability varies by program.</div>
+    <div class="g2">
+      <div>
+        <div class="slide-h3 mb1">Platform at a Glance</div>
+        <div class="g2" style="gap:.8rem">
+          <div class="card" style="text-align:center"><div class="stat-num teal" style="font-size:2.2rem">1,000+</div><div class="stat-label">API Analytics Insights</div></div>
+          <div class="card" style="text-align:center"><div class="stat-num" style="font-size:2.2rem;color:var(--violet)">800+</div><div class="stat-label">Multi-Omics Trait Reports</div></div>
+          <div class="card" style="text-align:center"><div class="stat-num" style="font-size:2.2rem;color:var(--gold)">53</div><div class="stat-label">Industry Solutions</div></div>
+          <div class="card" style="text-align:center"><div class="stat-num" style="font-size:2.2rem;color:var(--green)">&lt;90</div><div class="stat-label">Days to Initial Launch</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="slide-h3 mb1">Platform Exclusives</div>
+        <div style="display:flex;flex-direction:column;gap:.5rem"><div class="adv-card"><div class="adv-icon" style="background:#e8faf8"></div><div><div class="adv-title">5-Modal Biological Age</div><div class="adv-desc">Blood + epigenetic clocks + imaging + physiological + actuarial — cross-validated in one platform</div></div></div><div class="adv-card"><div class="adv-icon" style="background:#f3eefb"></div><div><div class="adv-title">Nonlinear Biomarker Interactions</div><div class="adv-desc">ML engine models cross-domain risk amplification invisible to linear analysis</div></div></div><div class="adv-card"><div class="adv-icon" style="background:#fdf6e8"></div><div><div class="adv-title">Patented Smartphone Imaging</div><div class="adv-desc">Facial age, body composition, grip strength — no lab required</div></div></div><div class="adv-card"><div class="adv-icon" style="background:#eaf7f1"></div><div><div class="adv-title">White-Label B2B API</div><div class="adv-desc">Built for enterprise deployment, with SDKs and fully branded apps</div></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-3">
+  <div class="inner">
+    <div class="slide-eyebrow">Solutions</div>
+    <h1 class="slide-h1">Precision Health <em>AI Engines</em></h1>
+    <p class="slide-sub">Five vertical engines, each delivered as lab testing, needs assessments, user-facing applications, personalized products and programs, and outcome monitoring.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem"><div class="eng-col"><div class="ph" role="img" aria-label="Precision longevity" style="background-image:url('https://images.unsplash.com/photo-1686874860929-728dacb0989c?auto=format&fit=crop&w=640&q=70')"></div><div class="eng-head" style="background:#a02a8f">Precision Longevity</div><div class="eng-body"><div class="eng-item">Healthy Aging (50+) Platform</div><div class="eng-item">Athletic Performance Optimization</div><div class="eng-item">Longevity for Hospitality</div><div class="eng-item">Precision Health for Smart Homes</div></div></div><div class="eng-col"><div class="ph" role="img" aria-label="Precision nutrition" style="background-image:url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=640&q=70')"></div><div class="eng-head" style="background:#4b2aa0">Precision Nutrition</div><div class="eng-body"><div class="eng-item">Personalized Weight Loss</div><div class="eng-item">GLP-1 Companion Application</div><div class="eng-item">Personalized Supplementation</div><div class="eng-item">Chronic Disease Management</div></div></div><div class="eng-col"><div class="ph" role="img" aria-label="Precision women's health" style="background-image:url('https://images.unsplash.com/photo-1630595271375-5073a6c0638b?auto=format&fit=crop&w=640&q=70')"></div><div class="eng-head" style="background:#2a6fa0">Precision Women's Health</div><div class="eng-body"><div class="eng-item">Fertility nutrition &amp; supplementation</div><div class="eng-item">Pregnancy nutrition, exercise &amp; supplementation</div><div class="eng-item">Menopause nutrition &amp; supplementation</div><div class="eng-item">Hormonal health optimization</div></div></div><div class="eng-col"><div class="ph" role="img" aria-label="Precision beauty" style="background-image:url('https://images.unsplash.com/photo-1552046122-03184de85e08?auto=format&fit=crop&w=640&q=70')"></div><div class="eng-head" style="background:#2aa070">Precision Beauty</div><div class="eng-body"><div class="eng-item">Anti-aging skin care formulation</div><div class="eng-item">Personalized hair loss treatment optimization</div><div class="eng-item">Beauty &amp; skin care product recommendation (e-commerce)</div></div></div><div class="eng-col"><div class="ph" role="img" aria-label="Precision medicine" style="background-image:url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=640&q=70')"></div><div class="eng-head" style="background:#4fa02a">Precision Medicine</div><div class="eng-body"><div class="eng-item">Disease screening &amp; preventive health</div><div class="eng-item">Pharmacogenomics</div><div class="eng-item">Population health</div><div class="eng-item">Health accessibility</div></div></div></div>
+    <div class="g2">
+      <div class="card">
+        <div class="slide-h3">Ready-to-Launch Platforms</div>
+        <p style="font-size:.8rem;color:var(--slate);margin-bottom:1rem">Branded platforms partners can deploy or co-develop.</p>
+        <div style="margin-bottom:.8rem"><div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--slate);margin-bottom:.3rem">Precision Longevity</div><span class="pill">Precision Health Intelligence Platform</span></div>
+        <div style="margin-bottom:.8rem"><div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--slate);margin-bottom:.3rem">Precision Beauty</div><span class="pill">Blueprint Beauty™</span><span class="pill">SkinGevity™</span></div>
+        <div><div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--slate);margin-bottom:.3rem">Precision Women's Health</div><span class="pill">Nine.Moons™</span><span class="pill">MenoGevity™</span></div>
+      </div>
+      <div class="card-soft" style="border-left:4px solid var(--teal)">
+        <div class="slide-h3">Spotlight: SkinGevity™</div>
+        <p style="font-size:.83rem;color:var(--slate);line-height:1.6;margin-bottom:.8rem">The first platform to transform visible results and product claims into measurable biological rejuvenation.</p>
+        <p style="font-size:.8rem;color:var(--slate);line-height:1.6;margin-bottom:.5rem">• Combines epigenetic biomarkers, facial imaging and AI modeling to quantify skin longevity.</p>
+        <p style="font-size:.8rem;color:var(--slate);line-height:1.6">• Enables reproducible before-and-after testing to demonstrate measurable rejuvenation.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-4">
+  <div class="inner">
+    <div class="slide-eyebrow">Health Intelligence</div>
+    <h1 class="slide-h1">Health Indices &amp; <em>Wellness</em></h1>
+    <p class="slide-sub">396 assessment tools — 212 actionable health indices across 13 wellness verticals, plus 184 personalized wellbeing traits — ready to embed in any partner product.</p>
+    <div class="g4 mb2">
+      <div class="card" style="text-align:center;border-top:3px solid var(--teal)"><div class="stat-num teal">396</div><div class="stat-label">Assessment Tools</div></div>
+      <div class="card" style="text-align:center;border-top:3px solid var(--violet)"><div class="stat-num" style="color:var(--violet)">212</div><div class="stat-label">Health Indices</div></div>
+      <div class="card" style="text-align:center;border-top:3px solid var(--gold)"><div class="stat-num gold">184</div><div class="stat-label">Wellbeing Traits</div></div>
+      <div class="card" style="text-align:center;border-top:3px solid var(--green)"><div class="stat-num green">13</div><div class="stat-label">Wellness Verticals</div></div>
+    </div>
+    <div class="g2 mb2">
+      <div class="card"><div style="font-weight:700;margin-bottom:1rem;font-size:.88rem">Health Indices by Vertical (212)</div><div class="chart-box" style="height:320px"><canvas id="indicesChart"></canvas></div></div>
+      <div class="card"><div style="font-weight:700;margin-bottom:1rem;font-size:.88rem">Wellbeing Traits by Category (184)</div><div class="chart-box" style="height:320px"><canvas id="wellbeingChart"></canvas></div></div>
+    </div>
+    <div class="card mb2"><div class="slide-h3 mb1">Wellness Verticals</div><div class="cat-grid"><div class="cat"><div class="ph" role="img" aria-label="Longevity and healthspan" style="background-image:url('https://images.unsplash.com/photo-1686874860929-728dacb0989c?auto=format&fit=crop&w=640&q=70')"></div><b>35</b><span>Longevity &amp; Healthspan</span></div><div class="cat"><div class="ph" role="img" aria-label="Chronic disease prevention" style="background-image:url('https://images.unsplash.com/photo-1513097847644-f00cfe868607?auto=format&fit=crop&w=640&q=70')"></div><b>27</b><span>Chronic Disease Prevention</span></div><div class="cat"><div class="ph" role="img" aria-label="Mental health and brain wellness" style="background-image:url('https://images.unsplash.com/photo-1697273245326-1a3736f6f428?auto=format&fit=crop&w=640&q=70')"></div><b>27</b><span>Mental Health &amp; Brain Wellness</span></div><div class="cat"><div class="ph" role="img" aria-label="Elite athlete performance" style="background-image:url('https://plus.unsplash.com/premium_photo-1661767854465-f6e9473ba687?auto=format&fit=crop&w=640&q=70')"></div><b>22</b><span>Elite Athlete Performance</span></div><div class="cat"><div class="ph" role="img" aria-label="Weight loss and body composition" style="background-image:url('https://images.unsplash.com/photo-1522844990619-4951c40f7eda?auto=format&fit=crop&w=640&q=70')"></div><b>20</b><span>Weight Loss &amp; Body Composition</span></div><div class="cat"><div class="ph" role="img" aria-label="Menopause management" style="background-image:url('https://images.unsplash.com/photo-1630595271375-5073a6c0638b?auto=format&fit=crop&w=640&q=70')"></div><b>16</b><span>Menopause Management</span></div><div class="cat"><div class="ph" role="img" aria-label="GLP-1 weight loss support" style="background-image:url('https://plus.unsplash.com/premium_photo-1667516657298-d0c72050ac09?auto=format&fit=crop&w=640&q=70')"></div><b>15</b><span>GLP-1 Weight Loss Support</span></div><div class="cat"><div class="ph" role="img" aria-label="Fertility and pregnancy" style="background-image:url('https://plus.unsplash.com/premium_photo-1750354361340-1f5f4c840ef3?auto=format&fit=crop&w=640&q=70')"></div><b>13</b><span>Fertility &amp; Pregnancy</span></div><div class="cat"><div class="ph" role="img" aria-label="Personalized skin care" style="background-image:url('https://plus.unsplash.com/premium_photo-1730157499408-6cc935baf5f3?auto=format&fit=crop&w=640&q=70')"></div><b>13</b><span>Personalized Skin Care</span></div><div class="cat"><div class="ph" role="img" aria-label="Hair loss solutions" style="background-image:url('https://plus.unsplash.com/premium_photo-1701113208728-51959e2d8834?auto=format&fit=crop&w=640&q=70')"></div><b>11</b><span>Hair Loss Solutions</span></div><div class="cat"><div class="ph" role="img" aria-label="Personalized supplementation" style="background-image:url('https://images.unsplash.com/photo-1741526623116-f4e3613af257?auto=format&fit=crop&w=640&q=70')"></div><b>9</b><span>Personalized Supplementation</span></div><div class="cat"><div class="ph" role="img" aria-label="Meal delivery personalization" style="background-image:url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=640&q=70')"></div><b>2</b><span>Meal Delivery Personalization</span></div><div class="cat"><div class="ph" role="img" aria-label="Food product personalization" style="background-image:url('https://images.unsplash.com/photo-1758272133786-ee98adcc6837?auto=format&fit=crop&w=640&q=70')"></div><b>2</b><span>Food Product Personalization</span></div></div></div>
+    <div class="card"><div class="slide-h3 mb1">Wellbeing Categories</div><div class="cat-grid"><div class="cat" style="border-left-color:var(--violet)"><b style="color:var(--violet)">38</b><span>Nutrition &amp; Metabolism</span></div><div class="cat" style="border-left-color:var(--violet)"><b style="color:var(--violet)">26</b><span>Fitness &amp; Performance</span></div><div class="cat" style="border-left-color:var(--violet)"><b style="color:var(--violet)">23</b><span>Allergies &amp; Sensitivities</span></div><div class="cat" style="border-left-color:var(--violet)"><b style="color:var(--violet)">22</b><span>Hair Care</span></div><div class="cat" style="border-left-color:var(--violet)"><b style="color:var(--violet)">21</b><span>Addiction Potential</span></div><div class="cat" style="border-left-color:var(--violet)"><b style="color:var(--violet)">21</b><span>Personality Traits</span></div><div class="cat" style="border-left-color:var(--violet)"><b style="color:var(--violet)">20</b><span>Skin Care</span></div><div class="cat" style="border-left-color:var(--violet)"><b style="color:var(--violet)">13</b><span>Minerals &amp; Micronutrients</span></div></div></div>
+  </div>
+</div>
+
+<div class="page" id="page-5">
+  <div class="inner">
+    <div class="slide-eyebrow">Precision Medicine</div>
+    <h1 class="slide-h1">Exome, Risk Scores &amp; <em>Pharmacogenomics</em></h1>
+    <p class="slide-sub">3,503 clinical traits spanning rare disease diagnosis, common-disease polygenic risk and personalized medication guidance.</p>
+    <div class="g4 mb2">
+      <div class="card" style="text-align:center;border-top:3px solid var(--teal)"><div class="stat-num teal">3,503</div><div class="stat-label">Total Precision Traits</div></div>
+      <div class="card" style="text-align:center;border-top:3px solid var(--green)"><div class="stat-num green">3,096</div><div class="stat-label">Exome+ Conditions</div></div>
+      <div class="card" style="text-align:center;border-top:3px solid var(--gold)"><div class="stat-num gold">215</div><div class="stat-label">PRS / Medical Traits</div></div>
+      <div class="card" style="text-align:center;border-top:3px solid var(--violet)"><div class="stat-num" style="color:var(--violet)">192</div><div class="stat-label">Pharmacogenomic Medications</div></div>
+    </div>
+    <div class="g2 mb2">
+      <div class="card"><div style="font-weight:700;margin-bottom:.3rem;font-size:.88rem">Polygenic Risk Scores by Clinical System (215)</div><p style="font-size:.74rem;color:var(--slate);margin-bottom:.8rem">Calibrated against established models such as ASCVD, Framingham and Finnish T2D.</p><div class="chart-box" style="height:340px"><canvas id="prsChart"></canvas></div></div>
+      <div class="card"><div style="font-weight:700;margin-bottom:.3rem;font-size:.88rem">Exome+ Conditions by Specialty (3,096)</div><p style="font-size:.74rem;color:var(--slate);margin-bottom:.8rem">OMIM-curated definitions for molecular diagnosis and carrier screening.</p><div class="chart-box" style="height:340px"><canvas id="exomeChart"></canvas></div></div>
+    </div>
+    <div class="card mb2">
+      <div class="slide-h3">Pharmacogenomics: 192 Medications</div>
+      <p style="font-size:.8rem;color:var(--slate);margin-bottom:1rem">Genetic predictors of efficacy and toxicity for precision dosing, drug selection and adverse-event risk stratification.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem"><div class="card-soft"><div style="font-weight:700;font-size:.85rem;margin-bottom:.5rem;color:var(--teal)">Cardiovascular</div><div style="font-size:.77rem;color:var(--slate);padding:.2rem 0">ACE inhibitors &amp; ARBs</div><div style="font-size:.77rem;color:var(--slate);padding:.2rem 0">Beta-blockers</div><div style="font-size:.77rem;color:var(--slate);padding:.2rem 0">Statins &amp; lipid agents</div><div style="font-size:.77rem;color:var(--slate);padding:.2rem 0">Anticoagulants</div></div><div class="card-soft"><div style="font-weight:700;font-size:.85rem;margin-bottom:.5rem;color:var(--teal)">Neuropsychiatric</div><div style="font-size:.77rem;color:var(--slate);padding:.2rem 0">Antidepressants</div><div style="font-size:.77rem;color:var(--slate);padding:.2rem 0">Antipsychotics</div><div style="font-size:.77rem;color:var(--slate);padding:.2rem 0">Anxiolytics</div><div style="font-size:.77rem;color:var(--slate);padding:.2rem 0">Mood stabilizers</div></div><div class="card-soft"><div style="font-weight:700;font-size:.85rem;margin-bottom:.5rem;color:var(--teal)">Metabolic &amp; Anti-inflammatory</div><div style="font-size:.77rem;color:var(--slate);padding:.2rem 0">Diabetes medications</div><div style="font-size:.77rem;color:var(--slate);padding:.2rem 0">NSAIDs &amp; analgesics</div><div style="font-size:.77rem;color:var(--slate);padding:.2rem 0">Gout agents</div><div style="font-size:.77rem;color:var(--slate);padding:.2rem 0">Biologics &amp; immunosuppressants</div></div><div class="card-soft"><div style="font-weight:700;font-size:.85rem;margin-bottom:.5rem;color:var(--teal)">Oncology &amp; Antimicrobial</div><div style="font-size:.77rem;color:var(--slate);padding:.2rem 0">Cancer therapeutics</div><div style="font-size:.77rem;color:var(--slate);padding:.2rem 0">Antibiotics</div><div style="font-size:.77rem;color:var(--slate);padding:.2rem 0">Antivirals</div><div style="font-size:.77rem;color:var(--slate);padding:.2rem 0">Antifungals</div></div></div>
+    </div>
+    <div class="card" style="overflow-x:auto">
+      <div class="slide-h3 mb1">Sample Pharmacogenomic Applications</div>
+      <table class="mini-table">
+        <thead><tr><th>Medication</th><th>Class</th><th>Clinical Application</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Warfarin</strong></td><td>Anticoagulant</td><td>CYP2C9 &amp; VKORC1 genotyping for dose and INR target prediction</td></tr>
+          <tr><td><strong>Clopidogrel</strong></td><td>Antiplatelet</td><td>CYP2C19 loss-of-function assessment for therapeutic response</td></tr>
+          <tr><td><strong>Metoprolol</strong></td><td>Beta-blocker</td><td>CYP2D6 phenotyping for dose optimization</td></tr>
+          <tr><td><strong>Fluoxetine / Paroxetine</strong></td><td>SSRI antidepressant</td><td>CYP2D6 &amp; CYP2C19 guided dosing</td></tr>
+          <tr><td><strong>Codeine</strong></td><td>Analgesic</td><td>CYP2D6 phenotype assessment (avoid in poor metabolizers)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-6">
+  <div class="inner">
+    <div class="slide-eyebrow">Data Foundation</div>
+    <h1 class="slide-h1">Validated on <em>Population-Scale</em> Data</h1>
+    <p class="slide-sub">Lifenome's risk models and health indices are calibrated and validated against an integrated, multi-modal dataset spanning four population cohorts and eight data modalities.</p>
+    <div class="g4 mb2">
+      <div class="card" style="text-align:center;border-top:3px solid var(--teal)"><div class="stat-num teal" style="font-size:2.3rem">1.75–2.0M</div><div class="stat-label">Cumulative Individuals*</div></div>
+      <div class="card" style="text-align:center;border-top:3px solid var(--violet)"><div class="stat-num" style="color:var(--violet)">4</div><div class="stat-label">Calibration Cohorts</div></div>
+      <div class="card" style="text-align:center;border-top:3px solid var(--gold)"><div class="stat-num gold">8</div><div class="stat-label">Data Modalities</div></div>
+      <div class="card" style="text-align:center;border-top:3px solid var(--green)"><div class="stat-num green">0.778</div><div class="stat-label">Mortality C-Index (UK Biobank)</div></div>
+    </div>
+    <div class="g4 mb2" style="grid-template-columns:repeat(auto-fit,minmax(230px,1fr))"><div class="card" style="border-top:3px solid var(--teal)"><div class="ph" role="img" aria-label="UK Biobank" style="background-image:url('https://images.unsplash.com/photo-1697360855476-46b372460c8d?auto=format&fit=crop&w=640&q=70')"></div><div style="font-weight:700;font-size:.9rem;margin-bottom:.2rem">UK Biobank</div><div style="font-family:var(--fd);font-size:1.9rem;font-weight:700;color:var(--teal);line-height:1.1;margin-bottom:.4rem">500,000+</div><div style="font-size:.76rem;color:var(--slate);line-height:1.55">Participants aged 37–73 in the UK · 10+ years of longitudinal mortality follow-up · 25–57 circulating biomarkers</div></div><div class="card" style="border-top:3px solid var(--violet)"><div class="ph" role="img" aria-label="NIH All of Us" style="background-image:url('https://images.unsplash.com/photo-1490642914619-7955a3fd483c?auto=format&fit=crop&w=640&q=70')"></div><div style="font-weight:700;font-size:.9rem;margin-bottom:.2rem">NIH All of Us</div><div style="font-family:var(--fd);font-size:1.9rem;font-weight:700;color:var(--violet);line-height:1.1;margin-bottom:.4rem">1,000,000+</div><div style="font-size:.76rem;color:var(--slate);line-height:1.55">Target cohort in the US · &gt;75% oversampling of historically underrepresented populations · EHR, survey, biosample, genotyping and wearable data</div></div><div class="card" style="border-top:3px solid var(--gold)"><div class="ph" role="img" aria-label="Emirati Genome Project" style="background-image:url('https://plus.unsplash.com/premium_photo-1744283234089-d01b14ac2324?auto=format&fit=crop&w=640&q=70')"></div><div style="font-weight:700;font-size:.9rem;margin-bottom:.2rem">Emirati Genome Project</div><div style="font-family:var(--fd);font-size:1.9rem;font-weight:700;color:var(--gold);line-height:1.1;margin-bottom:.4rem">Regional</div><div style="font-size:.76rem;color:var(--slate);line-height:1.55">Gulf Arab genetic representation · region-specific variant and ancestry calibration for the Middle East</div></div><div class="card" style="border-top:3px solid var(--green)"><div class="ph" role="img" aria-label="1000 Genomes and LatAM wearables" style="background-image:url('https://images.unsplash.com/photo-1761060848470-430208adaf1b?auto=format&fit=crop&w=640&q=70')"></div><div style="font-weight:700;font-size:.9rem;margin-bottom:.2rem">1000 Genomes + LatAM Wearables</div><div style="font-family:var(--fd);font-size:1.9rem;font-weight:700;color:var(--green);line-height:1.1;margin-bottom:.4rem">Regional</div><div style="font-size:.76rem;color:var(--slate);line-height:1.55">Peruvian, Colombian and Mexican ancestry · real-time activity, heart rate and behavioral data from Latin American cohorts</div></div></div>
+    <div style="font-size:.7rem;color:var(--slate);margin:-1rem 0 2rem">*Cumulative total is an estimate based on public genome project sizes and projected LatAM wearables integration.</div>
+    <div class="card mb2"><div class="slide-h3 mb1">Eight Integrated Data Modalities</div><div class="cat-grid" style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr))"><div class="cat" style="border-left-color:var(--sky)"><div class="ph" role="img" aria-label="Genomic data" style="background-image:url('https://images.unsplash.com/photo-1628595351029-c2bf17511435?auto=format&fit=crop&w=640&q=70')"></div><div style="font-weight:700;font-size:.82rem;color:var(--ink);margin-bottom:.25rem">A. Genomic</div><span>WGS, exome and genotyping arrays; medical, nutrition, skincare, fitness and wellbeing PGS; 193 PGx traits; APOE and neurodegeneration scores</span></div><div class="cat" style="border-left-color:var(--sky)"><div class="ph" role="img" aria-label="Proteomic data" style="background-image:url('https://plus.unsplash.com/premium_photo-1664476464399-995b131958f9?auto=format&fit=crop&w=640&q=70')"></div><div style="font-weight:700;font-size:.82rem;color:var(--ink);margin-bottom:.25rem">B. Proteomic</div><span>Circulating blood protein biomarkers; plasma proteomics; cardiovascular, metabolic, immune and inflammatory signatures</span></div><div class="cat" style="border-left-color:var(--sky)"><div class="ph" role="img" aria-label="Metabolomic data" style="background-image:url('https://plus.unsplash.com/premium_photo-1663011166001-666fd70c6e82?auto=format&fit=crop&w=640&q=70')"></div><div style="font-weight:700;font-size:.82rem;color:var(--ink);margin-bottom:.25rem">C. Metabolomic</div><span>Lipid profiles, amino acids, organic acids, vitamin and mineral levels, inflammatory and kidney/liver markers</span></div><div class="cat" style="border-left-color:var(--sky)"><div class="ph" role="img" aria-label="Epigenetic data" style="background-image:url('https://images.unsplash.com/photo-1633167606207-d840b5070fc2?auto=format&fit=crop&w=640&q=70')"></div><div style="font-weight:700;font-size:.82rem;color:var(--ink);margin-bottom:.25rem">D. Epigenetic</div><span>DNA methylation clocks (Hannum, Horvath, PhenoAge, DunedinPACE); &gt;500,000 CpG sites</span></div><div class="cat" style="border-left-color:var(--sky)"><div class="ph" role="img" aria-label="Wearable and sensor data" style="background-image:url('https://images.unsplash.com/photo-1777496410128-926b2d0083f9?auto=format&fit=crop&w=640&q=70')"></div><div style="font-weight:700;font-size:.82rem;color:var(--ink);margin-bottom:.25rem">E. Wearable &amp; Sensor</div><span>PPG-derived HR/HRV, optical body composition, Apple Health / Google Fit / smartwatch integration</span></div><div class="cat" style="border-left-color:var(--sky)"><div class="ph" role="img" aria-label="Lifestyle and behavioral data" style="background-image:url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=640&q=70')"></div><div style="font-weight:700;font-size:.82rem;color:var(--ink);margin-bottom:.25rem">F. Lifestyle &amp; Behavioral</div><span>Diet, exercise, sleep, stress, smoking/alcohol, chronotype; regional lifestyle data</span></div><div class="cat" style="border-left-color:var(--sky)"><div class="ph" role="img" aria-label="Clinical and EHR data" style="background-image:url('https://plus.unsplash.com/premium_photo-1664301544758-de5a9ff50650?auto=format&fit=crop&w=640&q=70')"></div><div style="font-weight:700;font-size:.82rem;color:var(--ink);margin-bottom:.25rem">G. Clinical &amp; EHR</div><span>ICD-10 diagnoses, medication history linked to PGx, procedures, longitudinal labs</span></div><div class="cat" style="border-left-color:var(--sky)"><div class="ph" role="img" aria-label="Microbiome data" style="background-image:url('https://images.unsplash.com/photo-1602052577122-f73b9710adba?auto=format&fit=crop&w=640&q=70')"></div><div style="font-weight:700;font-size:.82rem;color:var(--ink);margin-bottom:.25rem">H. Microbiome</div><span>16S rRNA sequencing, diversity indices, taxonomic classification, functional gene prediction</span></div></div></div>
+    <div class="g2">
+      <div class="card" style="overflow-x:auto">
+        <div class="slide-h3 mb1">Validation Metrics</div>
+        <table class="mini-table">
+          <thead><tr><th>Metric</th><th>UK Biobank</th><th>NHANES / All of Us</th></tr></thead>
+          <tbody>
+            <tr><td>Multi-biomarker C-index (mortality)</td><td>0.778 (95% CI 0.767–0.788)</td><td>PhenoAge AUC ≥0.68</td></tr>
+            <tr><td>Biomarker age ≥10 yr older: mortality HR</td><td>Significantly elevated (p&lt;0.001)</td><td>HR 1.11 per +1 yr BioAge</td></tr>
+            <tr><td>Variance explained beyond chronological age</td><td>&gt;65% healthy; &gt;84% whole population</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-soft" style="border-left:4px solid var(--teal)">
+        <div class="slide-h3">Population Coverage</div>
+        <p style="font-size:.8rem;color:var(--slate);line-height:1.65;margin-bottom:.6rem"><strong style="color:var(--ink)">High confidence:</strong> European, African-American and Hispanic/Latino populations.</p>
+        <p style="font-size:.8rem;color:var(--slate);line-height:1.65;margin-bottom:.6rem"><strong style="color:var(--ink)">Moderate confidence:</strong> Middle Eastern, South Asian and East Asian populations (Emirati and 1000 Genomes calibration).</p>
+        <p style="font-size:.8rem;color:var(--slate);line-height:1.65"><strong style="color:var(--ink)">Expanding:</strong> Latin American coverage via wearables integration, plus ongoing work to extend PGx and epigenetic clock validation to non-European ancestries and to broaden Asian, Sub-Saharan African, Pacific Islander and Indigenous representation.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-7">
+  <div class="inner">
+    <div class="slide-eyebrow">Global Reach</div>
+    <h1 class="slide-h1">Proven Across <em>14 Countries</em></h1>
+    <p class="slide-sub">Product-market fit established across four enterprise segments, with regional partnerships that put Lifenome technology in front of hundreds of thousands of end users.</p>
+    <div class="g4 mb2">
+      <div class="card" style="text-align:center;border-top:3px solid var(--teal)"><div class="stat-num teal">600K+</div><div class="stat-label">End-Users &amp; Patients Served</div><div class="stat-sub">Across 14 countries</div></div>
+      <div class="card" style="text-align:center;border-top:3px solid var(--violet)"><div class="stat-num" style="color:var(--violet)">20+</div><div class="stat-label">Enterprise Customers</div><div class="stat-sub">Multi-year agreements</div></div>
+      <div class="card" style="text-align:center;border-top:3px solid var(--gold)"><div class="stat-num gold">4</div><div class="stat-label">Client Segments</div><div class="stat-sub">Since 2018</div></div>
+      <div class="card" style="text-align:center;border-top:3px solid var(--green)"><div class="stat-num green">3</div><div class="stat-label">Business Models</div><div class="stat-sub">Licensing · Rev share · JV</div></div>
+    </div>
+    <div class="g3 mb2"><div class="card" style="border-top:3px solid var(--teal)"><div class="ph" role="img" aria-label="Dubai skyline" style="background-image:url('https://images.unsplash.com/photo-1651467606797-e1c660cf3fda?auto=format&fit=crop&w=640&q=70')"></div><div class="team-role" style="color:var(--teal)">UAE &amp; Middle East</div><div class="slide-h3">Emirati Genome</div><p style="font-size:.8rem;color:var(--slate);line-height:1.6;margin-bottom:.5rem">• 600K+ reports generated</p><p style="font-size:.8rem;color:var(--slate);line-height:1.6;margin-bottom:.5rem">• Expansion plans for a longevity platform for all UAE citizens and expats</p></div><div class="card" style="border-top:3px solid var(--gold)"><div class="ph" role="img" aria-label="Mexico City" style="background-image:url('https://images.unsplash.com/photo-1574493264149-87880133a2ba?auto=format&fit=crop&w=640&q=70')"></div><div class="team-role" style="color:var(--gold)">Mexico &amp; LATAM</div><div class="slide-h3">Genetria</div><p style="font-size:.8rem;color:var(--slate);line-height:1.6;margin-bottom:.5rem">• Spun off with Lifenome® Genomics AI® technology</p><p style="font-size:.8rem;color:var(--slate);line-height:1.6;margin-bottom:.5rem">• Joint venture with Optimo Life targeting the $11B LatAm precision longevity and beauty market</p></div><div class="card" style="border-top:3px solid var(--violet)"><div class="ph" role="img" aria-label="Singapore skyline" style="background-image:url('https://images.unsplash.com/photo-1628221680019-f28a2716e727?auto=format&fit=crop&w=640&q=70')"></div><div class="team-role" style="color:var(--violet)">Singapore &amp; SE Asia</div><div class="slide-h3">Pathomics Health</div><p style="font-size:.8rem;color:var(--slate);line-height:1.6;margin-bottom:.5rem">• Precision health and longevity agreement for Southeast Asia</p><p style="font-size:.8rem;color:var(--slate);line-height:1.6;margin-bottom:.5rem">• Revenue-share agreement for direct-to-consumer and employee wellness offerings</p></div></div>
+    <div class="card-soft" style="border:1px solid rgba(0,180,160,.2)"><div style="display:flex;align-items:center;gap:.8rem"><div><div style="font-weight:800;font-size:.88rem">CB Insights "Outperformer"</div><div style="font-size:.75rem;color:var(--slate)">Named among the top 15 precision health companies globally</div></div></div></div>
+  </div>
+</div>
+
+<div class="page" id="page-8">
+  <div class="inner">
+    <div class="slide-eyebrow">Partners &amp; Clients</div>
+    <h1 class="slide-h1">Powering the Global <em>Longevity Ecosystem</em></h1>
+    <p class="slide-sub">Trusted by the global longevity industry and built for scalability (2018–present). Our B2B(2C) partners span four segments and work with us through volume-based licensing, revenue share and joint ventures.</p>
+<div class="card" style="margin-bottom:1.1rem"><div class="ph ph-wide" role="img" aria-label="Longevity" style="background-image:url('https://images.unsplash.com/photo-1686874860929-728dacb0989c?auto=format&fit=crop&w=1200&q=70')"></div><div class="seg-head"><div class="seg-dot" style="background:var(--teal)"></div><div style="font-weight:700;font-size:.9rem">Longevity Enterprises</div></div><div class="client-grid"><div class="client-tile">LG Electronics</div><div class="client-tile">Genetria</div><div class="client-tile">Forté</div><div class="client-tile">Healthspan Digital</div><div class="client-tile">Zurich</div></div></div><div class="card" style="margin-bottom:1.1rem"><div class="ph ph-wide" role="img" aria-label="Genomics" style="background-image:url('https://images.unsplash.com/photo-1732046801426-f32529468176?auto=format&fit=crop&w=1200&q=70')"></div><div class="seg-head"><div class="seg-dot" style="background:var(--sky)"></div><div style="font-weight:700;font-size:.9rem">Precision Health &amp; Genomics Companies</div></div><div class="client-grid"><div class="client-tile">M42 / Emirati Genome</div><div class="client-tile">Vitel Health</div><div class="client-tile">Pathomics Health</div><div class="client-tile">Asia Genomics</div></div></div><div class="card" style="margin-bottom:1.1rem"><div class="ph ph-wide" role="img" aria-label="Fitness" style="background-image:url('https://images.unsplash.com/photo-1637430308606-86576d8fef3c?auto=format&fit=crop&w=1200&q=70')"></div><div class="seg-head"><div class="seg-dot" style="background:var(--gold)"></div><div style="font-weight:700;font-size:.9rem">Nutrition, Fitness &amp; Wellness Enterprises</div></div><div class="client-grid"><div class="client-tile">PepsiCo</div><div class="client-tile">Campbell's</div><div class="client-tile">GNC</div><div class="client-tile">AWA Nutrition</div></div></div><div class="card" style="margin-bottom:1.1rem"><div class="ph ph-wide" role="img" aria-label="Beauty and consumer health" style="background-image:url('https://images.unsplash.com/photo-1580870069867-74c57ee1bb07?auto=format&fit=crop&w=1200&q=70')"></div><div class="seg-head"><div class="seg-dot" style="background:var(--violet)"></div><div style="font-weight:700;font-size:.9rem">Consumer Health &amp; Beauty Enterprises</div></div><div class="client-grid"><div class="client-tile">Biologique Recherche</div><div class="client-tile">Allergan</div><div class="client-tile">Science Humans</div><div class="client-tile">Happy Head</div><div class="client-tile">SuperNatural Skincare</div></div></div>
+    <div class="card-soft" style="display:flex;gap:1.2rem;flex-wrap:wrap;align-items:center;justify-content:center">
+      <span style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--slate)">Business models</span>
+      <span class="pill" style="background:#e8f4f9;color:var(--sky)">Volume-based licensing</span>
+      <span class="pill">Revenue share</span>
+      <span class="pill" style="background:#f3eefb;color:var(--violet)">Joint ventures (equity share)</span>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-9">
+  <div class="inner">
+    <div class="slide-eyebrow">Differentiation</div>
+    <h1 class="slide-h1">Platform vs. <em>Point Solutions</em></h1>
+    <p class="slide-sub">LifeNome is not competing with InsideTracker or Function Health for consumer bloodwork. LifeNome is the intelligence infrastructure that enables those platforms — and any health company — to build multi-omics AI analytics.</p>
+    <div class="card mb2" style="overflow-x:auto">
+      <table class="comp-table">
+        <thead><tr><th>Capability</th><th><span class="badge-ln">LifeNome</span></th><th>InsideTracker</th><th>Function Health</th><th>ChatGPT/LLM</th></tr></thead>
+        <tbody>
+          <tr class="hl"><td>Blood Biomarker Analysis</td><td style="color:var(--teal);font-weight:700">229 markers + ML interactions</td><td>48 markers</td><td>160+ markers</td><td>Text only</td></tr>
+          <tr><td>DNA / Polygenic Risk Scores</td><td style="color:var(--teal);font-weight:700">215 disease + 184 wellbeing + 192 PGx</td><td>261 SNPs, 38 traits</td><td><span class="badge-no">None</span></td><td><span class="badge-no">None</span></td></tr>
+          <tr class="hl"><td>Epigenetic / Methylation Clocks</td><td style="color:var(--teal);font-weight:700">4 clocks + 500K+ CpG sites</td><td><span class="badge-no">N/A</span></td><td><span class="badge-no">N/A</span></td><td><span class="badge-no">N/A</span></td></tr>
+          <tr><td>Microbiome Analysis</td><td style="color:var(--teal);font-weight:700">86 taxa + diversity + pathways</td><td><span class="badge-no">N/A</span></td><td><span class="badge-no">N/A</span></td><td><span class="badge-no">N/A</span></td></tr>
+          <tr class="hl"><td>Smartphone Camera Imaging</td><td style="color:var(--teal);font-weight:700">Patented facial age + body comp</td><td><span class="badge-no">N/A</span></td><td>MRI/CT add-on ($499+)</td><td><span class="badge-no">N/A</span></td></tr>
+          <tr><td>White-Label B2B API</td><td style="color:var(--teal);font-weight:700">Full enterprise white-label</td><td><span class="badge-no">Consumer only</span></td><td><span class="badge-no">Consumer only</span></td><td><span class="badge-part">Partial</span></td></tr>
+          <tr class="hl"><td>Pharmacogenomics (PGx)</td><td style="color:var(--teal);font-weight:700">192 medications, CYP2D6/2C19</td><td><span class="badge-no">N/A</span></td><td><span class="badge-no">N/A</span></td><td><span class="badge-no">N/A</span></td></tr>
+          <tr><td>Specialized Vertical AI Engines</td><td style="color:var(--teal);font-weight:700">13 verticals, 212 health indices</td><td>10 healthspan scores</td><td>Per-biomarker flags</td><td><span class="badge-no">None</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="g3">
+      <div class="adv-card"><div class="adv-icon" style="background:#e8faf8;font-size:.9rem;font-weight:800;color:var(--teal)">01</div><div><div class="adv-title">1,000+ Biomarkers</div><div class="adv-desc">The most comprehensive choice of biomarkers in the market, kept current with a fast-moving science.</div></div></div>
+      <div class="adv-card"><div class="adv-icon" style="background:#fdf6e8;font-size:.9rem;font-weight:800;color:var(--gold)">02</div><div><div class="adv-title">Launch in &lt;90 Days</div><div class="adv-desc">Initial go-to-market in under 90 days, versus a 15.2-month industry average.</div></div></div>
+      <div class="adv-card"><div class="adv-icon" style="background:#f3eefb;font-size:.9rem;font-weight:800;color:var(--violet)">03</div><div><div class="adv-title">MVP from $50K</div><div class="adv-desc">As little as $50K to a working MVP, versus $3.2M+ average build cost.</div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-10">
+  <div class="inner">
+    <div class="slide-eyebrow">Team</div>
+    <h1 class="slide-h1">World-Class <em>Scientists</em></h1>
+    <p class="slide-sub">A founding team of top-cited scholars, supported by ten scientific and technology advisors with 200K+ collective peer-reviewed citations.</p>
+    <div class="g3 mb2">
+      <div class="team-card"><div class="team-role">CEO</div><div class="team-name">Ali Mostashari, PhD</div><div class="team-bio">MIT PhD · Top 20 globally cited in Complexity Science · Research Affiliate Scholar, MIT · Advised Fortune 500s, WEF, ANR and Newsweek on AI and healthcare · Oversaw a $1.2B tech portfolio in Africa</div></div>
+      <div class="team-card"><div class="team-role">Chief Scientist</div><div class="team-name">Raya Khanin, PhD</div><div class="team-bio">Weizmann PhD · Top 10 globally cited in Computational Genomics · Faculty at Memorial Sloan Kettering · Dorothy Hodgkin Fellow (UK) · 50+ publications · 16K+ citations</div></div>
+      <div class="team-card"><div class="team-role">SVP Technology</div><div class="team-name">Mario Storga, PhD</div><div class="team-bio">University of Bath Postdoc · Top 20 globally cited in Semantic Networks · Professor at University of Zagreb · Chair of Design Society and MAE at FSB/UZ</div></div>
+    </div>
+    <div class="card mb2">
+      <div class="slide-h3 mb1">Science &amp; Technology Advisory Team</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.7rem"><div style="padding:.7rem;border-radius:9px;background:#f7fafd;border:1px solid var(--line)"><div style="font-weight:700;font-size:.83rem">Klemo Vladimir, PhD</div><div style="font-size:.73rem;color:var(--slate)">VP Computational Science · Professor of Computer Science · AI/ML for large datasets</div></div><div style="padding:.7rem;border-radius:9px;background:#f7fafd;border:1px solid var(--line)"><div style="font-weight:700;font-size:.83rem">Marija Majda, PhD</div><div style="font-size:.73rem;color:var(--slate)">Senior Computational Scientist · Computational biology &amp; predictive ML</div></div><div style="padding:.7rem;border-radius:9px;background:#f7fafd;border:1px solid var(--line)"><div style="font-weight:700;font-size:.83rem">Keshav Singh, PhD</div><div style="font-size:.73rem;color:var(--slate)">Senior longevity advisor · Top cited longevity scholar · Mitochondrial DNA expert</div></div><div style="padding:.7rem;border-radius:9px;background:#f7fafd;border:1px solid var(--line)"><div style="font-weight:700;font-size:.83rem">Ana Maria Siega-Riz, PhD</div><div style="font-size:.73rem;color:var(--slate)">Senior women's health advisor · Dean, School of Public Health, UMass Amherst</div></div><div style="padding:.7rem;border-radius:9px;background:#f7fafd;border:1px solid var(--line)"><div style="font-weight:700;font-size:.83rem">Nicole Avena, PhD</div><div style="font-size:.73rem;color:var(--slate)">Senior medical advisor · Prof. of Neuroscience, Mount Sinai &amp; Princeton</div></div><div style="padding:.7rem;border-radius:9px;background:#f7fafd;border:1px solid var(--line)"><div style="font-weight:700;font-size:.83rem">Poroshat Shekarloo, MD</div><div style="font-size:.73rem;color:var(--slate)">Chief Medical Advisor · Director of Peer Review, Maimonides Medical Center</div></div><div style="padding:.7rem;border-radius:9px;background:#f7fafd;border:1px solid var(--line)"><div style="font-weight:700;font-size:.83rem">Sanaz Nosrat, PhD</div><div style="font-size:.73rem;color:var(--slate)">Senior exercise-for-longevity scientist · Prof. of Exercise Physiology, Columbia</div></div><div style="padding:.7rem;border-radius:9px;background:#f7fafd;border:1px solid var(--line)"><div style="font-weight:700;font-size:.83rem">Martin Gershon, MD, PhD</div><div style="font-size:.73rem;color:var(--slate)">Senior healthcare strategy advisor · Senior Advisor to Cancer Moonshot, White House</div></div><div style="padding:.7rem;border-radius:9px;background:#f7fafd;border:1px solid var(--line)"><div style="font-weight:700;font-size:.83rem">Delaram Kahrobaei, PhD</div><div style="font-size:.73rem;color:var(--slate)">Senior AI &amp; quantum computing · Prof. of Computer Science, CUNY</div></div><div style="padding:.7rem;border-radius:9px;background:#f7fafd;border:1px solid var(--line)"><div style="font-weight:700;font-size:.83rem">Martin Tristani, MD, PhD</div><div style="font-size:.73rem;color:var(--slate)">Medical science advisor · Board-certified cardiologist, University of Minnesota</div></div></div>
+    </div>
+    <div class="card-soft" style="border:1px solid rgba(0,180,160,.2)">
+      <div style="display:flex;gap:2rem;flex-wrap:wrap;justify-content:space-around;text-align:center">
+        <div><div style="font-family:var(--fd);font-size:2rem;font-weight:700;color:var(--teal)">200K+</div><div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--slate)">Collective Citations</div></div>
+        <div><div style="font-family:var(--fd);font-size:2rem;font-weight:700;color:var(--violet)">10</div><div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--slate)">Advisors</div></div>
+        <div><div style="font-family:var(--fd);font-size:2rem;font-weight:700;color:var(--gold)">3</div><div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--slate)">Founding Scientists</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-11">
+  <div class="inner" style="text-align:center;padding-top:2rem">
+    <div class="slide-eyebrow" style="display:block">Partner With Us</div>
+    <h1 class="slide-h1" style="font-size:3.6rem">Bring Precision Health<br>to <em>Your Customers</em></h1>
+    <p style="color:var(--slate);font-size:1.05rem;line-height:1.7;max-width:640px;margin:0 auto 2.5rem">LifeNome is not a health app. It is the intelligence layer that makes precision health possible at scale — embedded in your brand, live in as little as 90 days.</p>
+    <div class="g3 mb2" style="max-width:960px;margin-left:auto;margin-right:auto"><div class="card" style="text-align:left;border-top:3px solid var(--sky)"><div class="ph" role="img" aria-label="Software platform" style="background-image:url('https://images.unsplash.com/photo-1666875753105-c63a6f3bdc86?auto=format&fit=crop&w=640&q=70')"></div><div class="slide-h3">Volume-Based Licensing</div><p style="font-size:.8rem;color:var(--slate);line-height:1.6">License the platform, reports and APIs on a volume basis to power your own precision health products.</p></div><div class="card" style="text-align:left;border-top:3px solid var(--teal)"><div class="ph" role="img" aria-label="Partners shaking hands" style="background-image:url('https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=640&q=70')"></div><div class="slide-h3">Revenue Share</div><p style="font-size:.8rem;color:var(--slate);line-height:1.6">Launch with lower upfront cost and share in the revenue your precision health offering generates.</p></div><div class="card" style="text-align:left;border-top:3px solid var(--violet)"><div class="ph" role="img" aria-label="Partnership agreement" style="background-image:url('https://images.unsplash.com/photo-1638262052640-82e94d64664a?auto=format&fit=crop&w=640&q=70')"></div><div class="slide-h3">Joint Venture</div><p style="font-size:.8rem;color:var(--slate);line-height:1.6">Co-build a new venture around Lifenome technology in your market, with shared equity.</p></div></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);max-width:760px;margin:0 auto 2.5rem;gap:1.2rem">
+      <div class="val-card" style="text-align:center"><div class="val-yr">Time to Market</div><div class="val-num" style="font-size:2.8rem">&lt;90</div><div class="val-sub">Days to initial launch</div></div>
+      <div class="val-card" style="text-align:center"><div class="val-yr">MVP Cost</div><div class="val-num" style="font-size:2.8rem;color:var(--tl2)">$50K</div><div class="val-sub">As little as, vs. $3.2M+ average</div></div>
+      <div class="val-card" style="text-align:center"><div class="val-yr">Biomarkers</div><div class="val-num" style="font-size:2.8rem;color:var(--tl2)">1,000+</div><div class="val-sub">Most comprehensive choice in market</div></div>
+    </div>
+    <div style="max-width:540px;margin:0 auto 2rem">
+      <div class="card" style="border:2px solid var(--teal)"><div class="slide-h3 mb1">Contact</div><div style="font-size:.88rem;color:var(--slate)"><div style="margin-bottom:.4rem"><strong style="color:var(--ink)">Ali Mostashari, PhD</strong> — CEO, LifeNome Inc.</div><div>www.lifenome.com</div><div style="margin-top:1.2rem"><button type="button" class="cta-btn" onclick="openDemo()">Schedule a Demo</button></div></div></div>
+    </div>
+    <div class="watermark">LifeNome Inc. © 2026 · All Rights Reserved · Photography via Unsplash</div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div id="footnav">
+  <button class="fnav-btn" id="prevBtn" onclick="navigate(-1)" disabled>← Prev</button>
+  <div class="fnav-dots" id="fnDots"></div>
+  <button class="fnav-btn" id="nextBtn" onclick="navigate(1)">Next →</button>
+</div>
+
+<script>
+const PAGES = ['Cover','Why LifeNome','Platform','Solutions','Health Indices','Precision Medicine','Data','Global Reach','Clients','Differentiation','Team','Partner'];
+let curPage = 0;
+
+function setPage(i) {
+  document.querySelectorAll('.page').forEach(p => { p.classList.remove('active'); p.style.display = 'none'; });
+  const pg = document.getElementById('page-' + i);
+  pg.classList.add('active');
+  pg.style.display = (i === 0) ? 'flex' : 'block';
+  document.querySelectorAll('.ntab').forEach((t,idx) => t.classList.toggle('active', idx === i));
+  document.querySelectorAll('.fdot').forEach((d,idx) => d.classList.toggle('active', idx === i));
+  document.querySelectorAll('.hm-item').forEach((it,idx) => it.classList.toggle('mactive', idx === i));
+  document.getElementById('prevBtn').disabled = i === 0;
+  document.getElementById('nextBtn').disabled = i === PAGES.length - 1;
+  curPage = i;
+  window.scrollTo(0, 0);
+  closeHam();
+  if (i === 4) initHealthCharts();
+  if (i === 5) initPrecisionCharts();
+}
+function navigate(dir) { setPage(Math.max(0, Math.min(PAGES.length - 1, curPage + dir))); }
+
+const navTabs = document.getElementById('navTabs');
+const hamMenu = document.getElementById('hamMenu');
+const fnDots  = document.getElementById('fnDots');
+PAGES.forEach((p, i) => {
+  const b = document.createElement('button');
+  b.className = 'ntab' + (i === 0 ? ' active' : '');
+  b.textContent = p; b.onclick = () => setPage(i);
+  navTabs.appendChild(b);
+  const item = document.createElement('div');
+  item.className = 'hm-item' + (i === 0 ? ' mactive' : '');
+  item.innerHTML = '<div class="hm-num">' + (i + 1) + '</div><span>' + p + '</span>';
+  item.onclick = () => setPage(i);
+  hamMenu.appendChild(item);
+  const d = document.createElement('div');
+  d.className = 'fdot' + (i === 0 ? ' active' : '');
+  d.onclick = () => setPage(i);
+  fnDots.appendChild(d);
+});
+document.querySelectorAll('.page').forEach((p, i) => { p.style.display = (i === 0) ? 'flex' : 'none'; });
+
+function toggleHam() {
+  const open = !document.getElementById('hamMenu').classList.contains('open');
+  document.getElementById('hamMenu').classList.toggle('open', open);
+  document.getElementById('hamBtn').classList.toggle('open', open);
+}
+function closeHam() {
+  document.getElementById('hamMenu').classList.remove('open');
+  document.getElementById('hamBtn').classList.remove('open');
+}
+document.addEventListener('click', e => {
+  const menu = document.getElementById('hamMenu'), btn = document.getElementById('hamBtn');
+  if (menu.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target)) closeHam();
+});
+
+// ── CHARTS ──
+const built = {};
+function barChart(id, labels, data, color) {
+  new Chart(document.getElementById(id).getContext('2d'), {
+    type:'bar',
+    data:{labels:labels, datasets:[{data:data, backgroundColor:color, borderRadius:4}]},
+    options:{responsive:true, maintainAspectRatio:false, indexAxis:'y',
+      plugins:{legend:{display:false}},
+      scales:{x:{grid:{color:'rgba(0,0,0,.04)'}, ticks:{font:{size:10}}}, y:{grid:{display:false}, ticks:{font:{size:10}}}}}
+  });
+}
+function initHealthCharts() {
+  if (built.health) return; built.health = true;
+  barChart('indicesChart', ['Longevity','Disease Prevention','Mental Health','Elite Athlete','Weight Loss','Menopause','GLP-1','Fertility','Skincare','Hair Loss','Supplements','Meal Delivery','Food Products'], [35,27,27,22,20,16,15,13,13,11,9,2,2], '#0e7c7b');
+  new Chart(document.getElementById('wellbeingChart').getContext('2d'), {
+    type:'doughnut',
+    data:{labels:['Nutrition & Metabolism','Fitness & Performance','Allergies','Hair Care','Addiction','Personality','Skin Care','Minerals'],
+      datasets:[{data:[38,26,23,22,21,21,20,13], backgroundColor:['#00b4a0','#1a9abf','#6d3fa0','#b8852a','#1a9a6a','#ffffff','#8b5cf6','#0a1628'], borderWidth:2, borderColor:'#fff'}]},
+    options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'right', labels:{font:{size:10}, boxWidth:10}}}}
+  });
+}
+function initPrecisionCharts() {
+  if (built.prec) return; built.prec = true;
+  barChart('prsChart', ['Cancer','Circulatory','Digestive','Musculoskeletal','Female Reproductive','Endocrine-Metabolic','Nervous System','Respiratory','Other Systems'], [27,24,22,20,19,16,15,12,60], '#1f3a5f');
+  barChart('exomeChart', ['Neurology','Malformations','Cardiology','Hematology','ENT & Hearing','Immunology','Metabolic','Ophthalmology','Dermatology','Endocrinology','Hereditary Cancer','Nephrology','Gastroenterology','Pulmonology'], [822,391,307,281,274,218,206,199,131,106,72,45,32,12], '#2c6a8c');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') navigate(1);
+  else if (e.key === 'ArrowLeft') navigate(-1);
+});
+</script>
+
+<!-- DEMO REQUEST MODAL -->
+<div id="demoModal" role="dialog" aria-modal="true" aria-labelledby="demoTitle">
+  <div class="demo-panel">
+    <button type="button" class="demo-close" onclick="closeDemo()" aria-label="Close">&times;</button>
+    <div id="demoFormWrap">
+      <div class="demo-title" id="demoTitle">Schedule a Demo</div>
+      <p class="demo-sub">Tell us a little about your organization and we will arrange a product demo tailored to your area of interest.</p>
+      <div class="demo-error" id="demoError"></div>
+      <form id="demoForm" novalidate autocomplete="on">
+        <div class="demo-field" data-f="name"><label for="d_name">Name</label><input id="d_name" name="name" type="text" autocomplete="name" required><div class="demo-msg">Please enter your name.</div></div>
+        <div class="demo-field" data-f="email"><label for="d_email">Email</label><input id="d_email" name="email" type="email" autocomplete="email" required><div class="demo-msg">Please enter a valid email address.</div></div>
+        <div class="demo-field" data-f="company"><label for="d_company">Company Name</label><input id="d_company" name="company" type="text" autocomplete="organization" required><div class="demo-msg">Please enter your company name.</div></div>
+        <div class="demo-field" data-f="company_url"><label for="d_url">Company URL</label><input id="d_url" name="company_url" type="text" inputmode="url" placeholder="www.example.com" autocomplete="url" required><div class="demo-msg">Please enter a valid company website.</div></div>
+        <div class="demo-field" data-f="application_area"><label for="d_area">Application Area of Interest</label>
+          <select id="d_area" name="application_area" required>
+            <option value="">Select an area</option>
+            <option>Longevity Clinic / Brand</option>
+            <option>Women's Health Brand</option>
+            <option>Supplementation Brand</option>
+            <option>Hospitality Brand</option>
+            <option>MedSpa</option>
+            <option>Gym / Fitness Organization</option>
+            <option>Skin &amp; Hair Care Brand</option>
+            <option>GLP-1</option>
+            <option>Health &amp; Fitness App</option>
+            <option>Healthcare System</option>
+            <option>Mental Health Organization</option>
+            <option>Meal Delivery Service</option>
+            <option>Food &amp; Beverage Brand</option>
+            <option>Other</option>
+          </select>
+          <div class="demo-msg">Please select an area of interest.</div></div>
+        <div class="demo-hp" aria-hidden="true"><label>Leave blank<input type="text" name="_honey" tabindex="-1" autocomplete="off"></label></div>
+        <button type="submit" class="demo-submit" id="demoSubmit">Request Demo</button>
+      </form>
+    </div>
+    <div class="demo-done" id="demoDone">
+      <div class="demo-title">Thank you</div>
+      <p class="demo-sub" id="demoDoneText"></p>
+      <button type="button" class="demo-submit" onclick="closeDemo()">Close</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  // Form is delivered by a Google Apps Script web app owned by LifeNome: it emails the team
+  // and sends the visitor a confirmation. No mail client needed.
+  var ENDPOINT = 'https://script.google.com/macros/s/AKfycbziyXmAZ0Vu48Az8AFazMFbTyxfU6Fm_C_TJRHgIbCl6mIBY57hPcqpm3Y85IC_yod_/exec';
+  var modal = document.getElementById('demoModal');
+  var form = document.getElementById('demoForm');
+  var lastFocus = null;
+
+  window.openDemo = function(){
+    lastFocus = document.activeElement;
+    document.getElementById('demoFormWrap').style.display = 'block';
+    document.getElementById('demoDone').style.display = 'none';
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function(){ document.getElementById('d_name').focus(); }, 30);
+  };
+  window.closeDemo = function(){
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  };
+  modal.addEventListener('mousedown', function(e){ if (e.target === modal) closeDemo(); });
+  document.addEventListener('keydown', function(e){
+    if (modal.classList.contains('open')) {
+      if (e.key === 'Escape') closeDemo();
+      e.stopPropagation();
+    }
+  }, true);
+
+  function normUrl(v){
+    v = v.trim();
+    if (!v) return '';
+    if (!/^https?:\/\//i.test(v)) v = 'https://' + v;
+    return v;
+  }
+  function validUrl(v){
+    try { var u = new URL(normUrl(v)); return /\.[a-z]{2,}$/i.test(u.hostname); } catch(e){ return false; }
+  }
+  function setErr(name, bad){
+    var f = form.querySelector('[data-f="' + name + '"]');
+    if (f) f.classList.toggle('err', bad);
+    return bad;
+  }
+  form.addEventListener('input', function(e){
+    var f = e.target.closest && e.target.closest('.demo-field');
+    if (f) f.classList.remove('err');
+  });
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var v = {
+      name: form.name.value.trim(),
+      email: form.email.value.trim(),
+      company: form.company.value.trim(),
+      company_url: form.company_url.value.trim(),
+      application_area: form.application_area.value
+    };
+    var bad = false;
+    bad = setErr('name', !v.name) || bad;
+    bad = setErr('email', !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.email)) || bad;
+    bad = setErr('company', !v.company) || bad;
+    bad = setErr('company_url', !validUrl(v.company_url)) || bad;
+    bad = setErr('application_area', !v.application_area) || bad;
+    if (bad) return;
+
+    var err = document.getElementById('demoError');
+    var btn = document.getElementById('demoSubmit');
+    err.style.display = 'none';
+    btn.disabled = true; btn.textContent = 'Sending...';
+
+    var first = v.name.split(' ')[0];
+    var payload = {
+      name: v.name,
+      email: v.email,
+      company: v.company,
+      company_url: normUrl(v.company_url),
+      application_area: v.application_area
+    };
+
+    function fail(msg, detail){
+      err.textContent = msg;
+      if (detail) {
+        var d = document.createElement('div');
+        d.style.cssText = 'margin-top:.45rem;font-size:.72rem;opacity:.85';
+        d.textContent = 'Details: ' + detail;
+        err.appendChild(d);
+      }
+      err.style.display = 'block';
+    }
+
+    function done(){
+      document.getElementById('demoDoneText').textContent =
+        'Thanks, ' + first + '. We have sent a confirmation to ' + v.email + '. Someone from our team will get back to you within one business day.';
+      document.getElementById('demoFormWrap').style.display = 'none';
+      document.getElementById('demoDone').style.display = 'block';
+      form.reset();
+      btn.disabled = false; btn.textContent = 'Request Demo';
+    }
+
+    // Spam trap: bots fill the hidden field; show success but send nothing.
+    if (form._honey.value) { done(); return; }
+
+    // Form-encoded POST (no preflight). The script answers with JSON so we can confirm delivery.
+    fetch(ENDPOINT, {
+      method: 'POST',
+      body: new URLSearchParams(payload)
+    }).then(function(r){
+      return r.text().then(function(t){
+        var d = null; try { d = JSON.parse(t); } catch(e) {}
+        if (!d) {
+          var x = new Error('The script did not return a valid reply (HTTP ' + r.status + '). Check that the web app is deployed with access set to Anyone.');
+          x.service = true; throw x;
+        }
+        if (d.ok !== true) { var y = new Error(d.error || 'Unknown script error'); y.service = true; throw y; }
+        done();
+      });
+    }).catch(function(e){
+      console.error('Demo form error:', e);
+      if (e && e.service) {
+        fail('Your request was not delivered.', e.message);
+      } else {
+        fail('We could not reach the form service.', ((e && e.message) || 'network error') + ' (page origin: ' + location.origin + ')');
+      }
+      btn.disabled = false; btn.textContent = 'Request Demo';
+    });
+  });
+})();
+</script>
+</body>
+</html>
